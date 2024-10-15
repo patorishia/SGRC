@@ -9,3 +9,4 @@ Route::get('/', function () {
 
 
 Route::resource('condominio', CondominioController::class);
+

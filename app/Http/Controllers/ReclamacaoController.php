@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Condominio;
+use App\Models\Reclamacao;
 
-class CondominioController extends Controller
+class ReclamacaoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,8 +13,8 @@ class CondominioController extends Controller
     public function index()
     {
         //
-        $condominios = Condominio::all();
-        return view('condominio.index', compact('condominio'));
+        $reclamacoes = Reclamacao::all();
+        return view('reclamacao.index', compact('reclamacoes'));
     }
 
     /**
@@ -23,7 +23,7 @@ class CondominioController extends Controller
     public function create()
     {
         //
-        return view('condominio.create');
+        return view('reclamacao.create');
     }
 
     /**
@@ -33,34 +33,34 @@ class CondominioController extends Controller
     {
         //
         $request->validate([
-            'nome' => 'required|string|max:100',
-            'endereco' => 'required|string|max:255',
-            'cidade' => 'required|string|max:100',
-            'codigo_postal' => 'required|string|max:20',
+            'tipo_reclamacao' => 'required',
+            'descricao' => 'required',
+            'estado' => 'required',
+            'condominio_id' => 'required|exists:condominios,id',
+            'condomino_id' => 'required|exists:condomino,id',
         ]);
 
-        Condominio::create($request->all());
-
-        return redirect()->route('condominio.index')->with('success', 'Condomínio criado com sucesso.');
-    
+        Reclamacao::create($request->all());
+        return redirect()->route('reclamacao.index')->with('success', 'Reclamação criada com sucesso!');
     }
+    
 
     /**
      * Display the specified resource.
      */
-    public function show(Condominio $condominio)
+    public function show(Reclamacao $reclamacao)
     {
         //
-        return view('condominios.show', compact('condominio'));
+        return view('reclamacao.show', compact('reclamacao'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Condominio $condominio)
+    public function edit(Reclamacao $reclamacao)
     {
         //
-        return view('condominio.edit', compact('condominio'));
+        return view('reclamacao.edit', compact('reclamacao'));
     }
 
     /**
