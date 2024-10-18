@@ -2,80 +2,88 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Condominio; // Certifique-se de que você importou o modelo
 use Illuminate\Http\Request;
-use App\Models\Condominio;
 
 class CondominioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Exibir a lista de condomínios
     public function index()
     {
-        //
         $condominios = Condominio::all();
-        return view('condominio.index', compact('condominio'));
+        return view('condominios.index', compact('condominios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
+    // Exibir o formulário para criar um novo condomínio
     public function create()
     {
-        //
-        return view('condominio.create');
+        return view('condominios.create'); // Crie esta view para o formulário
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Armazenar um novo condomínio
     public function store(Request $request)
     {
-        //
         $request->validate([
-            'nome' => 'required|string|max:100',
+            'nome' => 'required|string|max:255',
             'endereco' => 'required|string|max:255',
-            'cidade' => 'required|string|max:100',
+            'cidade' => 'required|string|max:255',
             'codigo_postal' => 'required|string|max:20',
         ]);
 
-        Condominio::create($request->all());
+        Condominio::create([
+            'nome' => $request->nome,
+            'endereco' => $request->endereco,
+            'cidade' => $request->cidade,
+            'codigo_postal' => $request->codigo_postal,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
-        return redirect()->route('condominio.index')->with('success', 'Condomínio criado com sucesso.');
-    
+        return redirect()->route('condominios.index')->with('success', 'Condomínio criado com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Condominio $condominio)
+      // Exibir um condomínio específico
+      public function show($id)
+      {
+          $condominio = Condominio::findOrFail($id);
+          return view('condominios.show', compact('condominio'));
+      }
+
+    // Exibir o formulário para editar um condomínio
+    public function edit($id)
     {
-        //
-        return view('condominios.show', compact('condominio'));
+        $condominio = Condominio::findOrFail($id);
+        return view('condominios.edit', compact('condominio'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Condominio $condominio)
+    // Atualizar um condomínio específico
+    public function update(Request $request, $id)
     {
-        //
-        return view('condominio.edit', compact('condominio'));
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'endereco' => 'required|string|max:255',
+            'cidade' => 'required|string|max:255',
+            'codigo_postal' => 'required|string|max:20',
+        ]);
+
+        $condominio = Condominio::findOrFail($id);
+        $condominio->update([
+            'nome' => $request->nome,
+            'endereco' => $request->endereco,
+            'cidade' => $request->cidade,
+            'codigo_postal' => $request->codigo_postal,
+        ]);
+
+        return redirect()->route('condominios.index')->with('success', 'Condomínio atualizado com sucesso!');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Excluir um condomínio específico
+    public function destroy($id)
     {
-        //
-    }
+        $condominio = Condominio::findOrFail($id);
+        $condominio->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('condominios.index')->with('success', 'Condomínio excluído com sucesso!');
     }
 }

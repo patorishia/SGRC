@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CondominioController;
+use App\Http\Controllers\ReclamacaoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,4 +19,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Rotas para condomínios (CRUD completo)
+Route::resource('condominios', CondominioController::class);
+
+// Rotas para reclamações (CRUD completo, apenas autenticadas)
+Route::middleware('auth')->group(function () {
+    Route::resource('reclamacoes', ReclamacaoController::class);
+});
+
 require __DIR__.'/auth.php';
+

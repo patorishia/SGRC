@@ -2,80 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Reclamacao;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReclamacaoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
-        $reclamacoes = Reclamacao::all();
-        return view('reclamacao.index', compact('reclamacoes'));
+        $reclamacoes = Reclamacao::all(); // Ou filtre conforme necessário
+        return view('reclamacoes.index', compact('reclamacoes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
-        return view('reclamacao.create');
+        return view('reclamacoes.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
         $request->validate([
-            'tipo_reclamacao' => 'required',
-            'descricao' => 'required',
-            'estado' => 'required',
-            'condominio_id' => 'required|exists:condominios,id',
-            'condomino_id' => 'required|exists:condomino,id',
+            'condomino_id' => 'required|integer',
+            'condominio_id' => 'required|integer',
+            'tipo_reclamacao' => 'required|string|max:255',
+            'descricao' => 'required|string',
+            // Adicione outras validações conforme necessário
         ]);
 
-        Reclamacao::create($request->all());
-        return redirect()->route('reclamacao.index')->with('success', 'Reclamação criada com sucesso!');
-    }
-    
+        Reclamacao::create([
+            'condomino_id' => $request->condomino_id,
+            'condominio_id' => $request->condominio_id,
+            'tipo_reclamacao' => $request->tipo_reclamacao,
+            'descricao' => $request->descricao,
+            'estado' => 'pendente', // Por exemplo, estado inicial
+            'data_criacao' => now(),
+            // 'data_resolucao' => null, // Deixe em branco inicialmente
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Reclamacao $reclamacao)
-    {
-        //
-        return view('reclamacao.show', compact('reclamacao'));
+        return redirect()->route('reclamacoes.index')->with('success', 'Reclamação criada com sucesso!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Reclamacao $reclamacao)
     {
-        //
-        return view('reclamacao.edit', compact('reclamacao'));
+        return view('reclamacoes.edit', compact('reclamacao'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Reclamacao $reclamacao)
     {
-        //
+        $request->validate([
+            'tipo_reclamacao' => 'required|string|max:255',
+            'descricao' => 'required|string',
+        ]);
+
+        $reclamacao->update($request->only(['tipo_reclamacao', 'descricao']));
+
+        return redirect()->route('reclamacoes.index')->with('success', 'Reclamação atualizada com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Reclamacao $reclamacao)
     {
-        //
+        $reclamacao->delete();
+        return redirect()->route('reclamacoes.index')->with('success', 'Reclamação excluída com sucesso!');
     }
 }
