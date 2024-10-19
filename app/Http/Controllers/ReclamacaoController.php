@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Reclamacao;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ReclamacaoController extends Controller
 {
     public function index()
     {
         $reclamacoes = Reclamacao::all(); // Ou filtre conforme necessário
-        return view('reclamacoes.index', compact('reclamacoes'));
+        return view('reclamacao.index', compact('reclamacoes'));
     }
 
     public function create()
