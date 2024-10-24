@@ -12,11 +12,10 @@ return new class extends Migration
     public function up()
 {
     Schema::table('condominios', function (Blueprint $table) {
-        // Renomeia o campo data_criacao para created_at
-        $table->renameColumn('data_criacao', 'created_at');
+       // Renomear as colunas 'data_criacao' e 'ultima_atualizacao' para 'created_at' e 'updated_at'
+       $table->renameColumn('data_criacao', 'created_at');
+       $table->renameColumn('ultima_atualizacao', 'updated_at');
 
-        // Adiciona o campo updated_at
-        $table->timestamp('updated_at')->nullable();
     });
 }
 

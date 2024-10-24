@@ -10,11 +10,13 @@ class Condominio extends Model
     use HasFactory;
     protected $table = 'condominio'; // Nome da tabela
 
-    // Campos que podem ser preenchidos em massa
+    // Campos 
     protected $fillable = [
         'nome',
         'endereco',
         'cidade',
         'codigo_postal',
+        'created_at',
+        'updated_at',
     ];
 }
