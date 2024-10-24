@@ -12,12 +12,13 @@
     <form action="{{ route('reclamacoes.store') }}" method="POST">
         @csrf
 
-        <label for="tipo_reclamacao">Tipo de Reclamação</label>
-        <select name="tipo_reclamacao_id" id="tipo_reclamacao" required>
-            @foreach ($tipos as $tipo)
+        <label for="tipo_reclamacao_id">Tipo de Reclamação:</label>
+        <select name="tipo_reclamacao_id" id="tipo_reclamacao_id" required>
+            @foreach ($tiposReclamacao as $tipo)
                 <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>
             @endforeach
         </select>
+
 
         <label for="descricao">Descrição:</label>
         <textarea name="descricao" id="descricao" required></textarea>
