@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoReclamacao extends Model
 {
-    protected $table = 'tipos_reclamacoes';
+    protected $table = 'tipos_reclamacao';
 
     public function reclamacoes()
     {

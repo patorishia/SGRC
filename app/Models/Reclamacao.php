@@ -10,7 +10,7 @@ class Reclamacao extends Model
     use HasFactory;
     protected $table = 'reclamacao'; 
     protected $fillable = [
-        'tipo_reclamacao',
+        'tipo_reclamacao_id',
         'descricao',
         'estado',
         'condominio_id', // ID do condomínio associado

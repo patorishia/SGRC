@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reclamacao;
+use App\Models\TipoReclamacao;
 use Illuminate\Http\Request;
 
 class ReclamacaoController extends Controller
@@ -15,9 +16,8 @@ class ReclamacaoController extends Controller
 
     public function create()
     {
-        return view('reclamacoes.create');
-        $tipos = TipoReclamacao::all(); // Obter todos os tipos de reclamação
-        return view('reclamacoes.create', compact('tipos'));
+        $tiposReclamacao = TipoReclamacao::all();
+        return view('reclamacoes.create', compact('tiposReclamacao'));
     }
 
     public function store(Request $request)
@@ -25,19 +25,17 @@ class ReclamacaoController extends Controller
         $request->validate([
             'condomino_id' => 'required|integer',
             'condominio_id' => 'required|integer',
-            'tipo_reclamacao' => 'required|string|max:255',
+            'tipo_reclamacao_id' => 'required|integer', //Alterado
             'descricao' => 'required|string',
-            // Adicione outras validações conforme necessário
         ]);
 
         Reclamacao::create([
             'condomino_id' => $request->condomino_id,
             'condominio_id' => $request->condominio_id,
-            'tipo_reclamacao' => $request->tipo_reclamacao,
+            'tipo_reclamacao_id' => $request->tipo_reclamacao_id, //Alterado
             'descricao' => $request->descricao,
-            'estado' => 'pendente', // Por exemplo, estado inicial
-            'data_criacao' => now(),
-            // 'data_resolucao' => null, // Deixe em branco inicialmente
+            'estado' => 'pendente', 
+            'created_at' => now(), //Alterado
         ]);
 
         return redirect()->route('reclamacoes.index')->with('success', 'Reclamação criada com sucesso!');
@@ -51,7 +49,7 @@ class ReclamacaoController extends Controller
     public function update(Request $request, Reclamacao $reclamacao)
     {
         $request->validate([
-            'tipo_reclamacao' => 'required|string|max:255',
+            'tipo_reclamacao_id' => 'required|integer', // Alterado
             'descricao' => 'required|string',
         ]);
 
