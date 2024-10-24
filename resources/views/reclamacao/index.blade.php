@@ -22,12 +22,12 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($reclamacoes as $reclamacao)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $reclamacao->titulo }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $reclamacao->tipo_reclamacao }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $reclamacao->descricao }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $reclamacao->estado }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <a href="{{ route('reclamacao.edit', $reclamacao) }}" class="text-blue-500 hover:text-blue-700">Editar</a>
-                                        <form action="{{ route('reclamacao.destroy', $reclamacao) }}" method="POST" style="display:inline;">
+                                        <a href="{{ route('reclamacoes.edit', $reclamacao) }}" class="text-blue-500 hover:text-blue-700">Editar</a>
+                                        <form action="{{ route('reclamacoes.destroy', $reclamacao) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:text-red-700">Excluir</button>

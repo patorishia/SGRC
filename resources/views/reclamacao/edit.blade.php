@@ -7,12 +7,12 @@
 </head>
 <body>
     <h1>Editar Reclamação</h1>
-    <form action="{{ route('reclamacao.update', $reclamacao) }}" method="POST">
+    <form action="{{ route('reclamacoes.update', $reclamacao) }}" method="POST">
         @csrf
         @method('PUT')
 
         <label for="titulo">Título:</label>
-        <input type="text" name="titulo" id="titulo" value="{{ $reclamacao->titulo }}" required>
+        <input type="text" name="titulo" id="titulo" value="{{ $reclamacao->tipo_reclamacao }}" required>
 
         <label for="descricao">Descrição:</label>
         <textarea name="descricao" id="descricao" required>{{ $reclamacao->descricao }}</textarea>
@@ -33,6 +33,6 @@
 
         <button type="submit">Atualizar</button>
     </form>
-    <a href="{{ route('reclamacao.index') }}">Voltar</a>
+    <a href="{{ route('reclamacoes.index') }}">Voltar</a>
 </body>
 </html>

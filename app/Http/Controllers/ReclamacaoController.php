@@ -10,12 +10,14 @@ class ReclamacaoController extends Controller
     public function index()
     {
         $reclamacoes = Reclamacao::all(); // Ou filtre conforme necessário
-        return view('reclamacao.index', compact('reclamacoes'));
+        return view('reclamacoes.index', compact('reclamacoes'));
     }
 
     public function create()
     {
         return view('reclamacoes.create');
+        $tipos = TipoReclamacao::all(); // Obter todos os tipos de reclamação
+        return view('reclamacoes.create', compact('tipos'));
     }
 
     public function store(Request $request)

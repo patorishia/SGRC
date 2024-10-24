@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Reclamação</title>
 </head>
+
 <body>
     <h1>Criar Reclamação</h1>
-    <form action="{{ route('reclamacao.store') }}" method="POST">
+    <form action="{{ route('reclamacoes.store') }}" method="POST">
         @csrf
-        <label for="titulo">Título:</label>
-        <input type="text" name="titulo" id="titulo" required>
+
+        <label for="tipo_reclamacao">Tipo de Reclamação</label>
+        <select name="tipo_reclamacao_id" id="tipo_reclamacao" required>
+            @foreach ($tipos as $tipo)
+                <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>
+            @endforeach
+        </select>
 
         <label for="descricao">Descrição:</label>
         <textarea name="descricao" id="descricao" required></textarea>
@@ -31,6 +38,7 @@
 
         <button type="submit">Criar</button>
     </form>
-    <a href="{{ route('reclamacao.index') }}">Voltar</a>
+    <a href="{{ route('reclamacoes.index') }}">Voltar</a>
 </body>
+
 </html>

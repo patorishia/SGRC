@@ -14,7 +14,7 @@
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <h3 class="text-lg font-medium">Total de Reclamações</h3>
                         <p class="text-2xl">{{ $totalReclamacoes }}</p>
-                        <a href="{{ route('reclamacao.index') }}" class="text-blue-500">Ver todas as reclamações</a>
+                        <a href="{{ route('reclamacoes.index') }}" class="text-blue-500">Ver todas as reclamações</a>
                     </div>
                 </div>
 

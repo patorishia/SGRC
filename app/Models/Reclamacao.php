@@ -24,4 +24,9 @@ class Reclamacao extends Model
     {
         return $this->belongsTo(Condominio::class);
     }
+
+    public function tipoReclamacao()
+    {
+        return $this->belongsTo(TipoReclamacao::class, 'tipo_reclamacao_id');
+    }
 }
