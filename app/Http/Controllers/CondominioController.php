@@ -36,8 +36,6 @@ class CondominioController extends Controller
             'endereco' => $request->endereco,
             'cidade' => $request->cidade,
             'codigo_postal' => $request->codigo_postal,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         return redirect()->route('condominios.index')->with('success', 'Condomínio criado com sucesso!');

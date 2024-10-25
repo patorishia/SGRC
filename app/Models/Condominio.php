@@ -16,7 +16,5 @@ class Condominio extends Model
         'endereco',
         'cidade',
         'codigo_postal',
-        'created_at',
-        'updated_at',
     ];
 }

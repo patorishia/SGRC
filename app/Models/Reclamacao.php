@@ -15,8 +15,6 @@ class Reclamacao extends Model
         'estado',
         'condominio_id', // ID do condomínio associado
         'condomino_id',// ID do condómino associado
-        'created_at',
-        'updated_at',
     ];
 
     // Definindo relacionamento com Condomínio

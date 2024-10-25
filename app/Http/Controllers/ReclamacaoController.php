@@ -25,17 +25,16 @@ class ReclamacaoController extends Controller
         $request->validate([
             'condomino_id' => 'required|integer',
             'condominio_id' => 'required|integer',
-            'tipo_reclamacao_id' => 'required|integer', //Alterado
+            'tipo_reclamacao_id' => 'required|integer', 
             'descricao' => 'required|string',
         ]);
 
         Reclamacao::create([
             'condomino_id' => $request->condomino_id,
             'condominio_id' => $request->condominio_id,
-            'tipo_reclamacao_id' => $request->tipo_reclamacao_id, //Alterado
+            'tipo_reclamacao_id' => $request->tipo_reclamacao_id, 
             'descricao' => $request->descricao,
             'estado' => 'pendente', 
-            'created_at' => now(), //Alterado
         ]);
 
         return redirect()->route('reclamacoes.index')->with('success', 'Reclamação criada com sucesso!');
@@ -49,7 +48,7 @@ class ReclamacaoController extends Controller
     public function update(Request $request, Reclamacao $reclamacao)
     {
         $request->validate([
-            'tipo_reclamacao_id' => 'required|integer', // Alterado
+            'tipo_reclamacao_id' => 'required|integer', 
             'descricao' => 'required|string',
         ]);
 

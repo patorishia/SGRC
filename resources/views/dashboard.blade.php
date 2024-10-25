@@ -9,6 +9,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Estatísticas Rápidas -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                 <!-- Total de Condomínios -->
+                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <h3 class="text-lg font-medium">Total de Condomínios</h3>
+                        <p class="text-2xl">{{ $totalCondominios}}</p>
+                        <a href="{{ route('condominios.index') }}" class="text-blue-500">Ver todas os Condomínios</a>
+                    </div>
+                </div>
                 <!-- Total de Reclamações -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
