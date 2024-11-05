@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Condominio; // Certifique-se de que você importou o modelo
+use App\Models\Condominio;
 use Illuminate\Http\Request;
 
 class CondominioController extends Controller

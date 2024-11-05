@@ -26,23 +26,6 @@
                     </div>
                 </div>
 
-                <!-- Reclamações Pendentes -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-medium">Reclamações Pendentes</h3>
-                        <p class="text-2xl">{{ $reclamacoesPendentes }}</p>
-                        <a href="{{ route('reclamacoes.pendentes') }}" class="text-blue-500">Ver pendentes</a>
-                    </div>
-                </div>
-
-                <!-- Reclamações Resolvidas -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-medium">Reclamações Resolvidas</h3>
-                        <p class="text-2xl">{{ $reclamacoesResolvidas }}</p>
-                        <a href="{{ route('reclamacoes.resolvidas') }}" class="text-blue-500">Ver resolvidas</a>
-                    </div>
-                </div>
 
                 <!-- Acesso a Gráficos -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -84,8 +67,8 @@
                                 <tr>
                                     <td>{{ $reclamacao->id }}</td>
                                     <td>{{ $reclamacao->descricao }}</td>
-                                    <td>{{ $reclamacao->data_criacao->format('d/m/Y H:i:s') }}</td>
-                                    <td>{{ $reclamacao->ultima_atualizacao->format('d/m/Y H:i:s') }}</td>
+                                    <td>{{ $reclamacao->created_at->format('d/m/Y H:i:s') }}</td>
+                                    <td>{{ $reclamacao->updated_at->format('d/m/Y H:i:s') }}</td>
                                     <td>
                                         <a href="{{ route('reclamacoes.show', $reclamacao->id) }}" class="text-blue-500">Ver</a>
                                         <a href="{{ route('reclamacoes.edit', $reclamacao->id) }}" class="ml-2 text-yellow-500">Editar</a>
@@ -106,10 +89,10 @@
         const reclamacoesChart = new Chart(ctx, {
             type: 'bar', // Tipo de gráfico
             data: {
-                labels: ['Total', 'Pendentes', 'Resolvidas'], // Rótulos
+                labels: ['Total'], // Rótulos
                 datasets: [{
                     label: 'Reclamações',
-                    data: [{{ $totalReclamacoes }}, {{ $reclamacoesPendentes }}, {{ $reclamacoesResolvidas }}], // Dados
+                    data: [{{ $totalReclamacoes }}], // Dados
                     backgroundColor: ['#f87171', '#fbbf24', '#34d399'], // Cores
                 }]
             },

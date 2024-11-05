@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-         // Criar permissões
-         $permissions = [
+        // Criar permissões
+        $permissions = [
             //Admin:
             'create condominiums',
             'edit condominiums',
@@ -57,5 +57,6 @@ class DatabaseSeeder extends Seeder
 
         // Atribuir permissões ao user
         $userRole->givePermissionTo(['create complaints', 'view own complaints', 'view profile']);
+
     }
 }

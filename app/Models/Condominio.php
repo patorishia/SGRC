@@ -17,4 +17,10 @@ class Condominio extends Model
         'cidade',
         'codigo_postal',
     ];
+
+    public function reclamacoes()
+    {
+        return $this->hasMany(Reclamacao::class, 'condominio_id');
+    }
+
 }
