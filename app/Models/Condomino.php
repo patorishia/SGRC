@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Condomino extends Model
 {
     use HasFactory;
+    use Notifiable;
 
     protected $table = 'condomino'; // Nome da tabela
     protected $primaryKey = 'nif'; // Substitua pelo nome correto da chave primária
@@ -35,6 +37,17 @@ class Condomino extends Model
     public function reclamacoes()
     {
         return $this->hasMany(Reclamacao::class, 'condomino_id');
+    }
+
+    /**
+     * Define o número de telefone para notificações Vonage.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForVonage($notification)
+    {
+        return $this->telefone; // Supondo que o campo 'telefone' armazena o número de telefone no modelo
     }
 
 }

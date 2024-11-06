@@ -9,6 +9,7 @@ use App\Models\Estado;
 use Illuminate\Http\Request;
 use App\Mail\NotificacaoEmail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ReclamacaoController extends Controller
 {
@@ -27,35 +28,41 @@ class ReclamacaoController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Dados recebidos para criar reclamação:', $request->all());
+
         $request->validate([
-            'condomino_id' => 'required|integer',
+            'condomino_id' => 'required|numeric|digits:8|exists:condomino,nif',
             'condominio_id' => 'required|integer',
-            'estado_id' => 'required|integer',
             'tipo_reclamacao_id' => 'required|integer',
             'descricao' => 'required|string',
-            'email' => 'required|email',
+            ///'email' => 'required|email',
         ]);
 
-        Reclamacao::create([
-            'condomino_id' => $request->condomino_id,
-            'estado_id' => $request->estado_id,
-            'condominio_id' => $request->condominio_id,
-            'tipo_reclamacao_id' => $request->tipo_reclamacao_id,
-            'descricao' => $request->descricao,
-            'email' => $request->email,
-        ]);
+        // Define o estado como 'pendente'
+        $estadoId = 1;
+
+        
+            Reclamacao::create([
+                'condomino_id' => $request->condomino_id,
+                'estado_id' => $estadoId,
+                'condominio_id' => $request->condominio_id,
+                'tipo_reclamacao_id' => $request->tipo_reclamacao_id,
+                'descricao' => $request->descricao,
+                //'email' => $request->email,
+            ]);
+
+            return redirect()->route('reclamacoes.index')->with('success', 'Reclamação criada com sucesso!');
+        
 
         // Dados para enviar no email
-        $dados = [
+        /*$dados = [
             'nome' => $request->nome, // Supondo que você tenha o nome do condômino
             'descricao' => $request->descricao,
         ];
 
         // Enviar o email de notificação
-        Mail::to($request->email)->send(new NotificacaoEmail($dados));
+        Mail::to($request->email)->send(new NotificacaoEmail($dados));*/
 
-
-        return redirect()->route('reclamacoes.index')->with('success', 'Reclamação criada com sucesso!');
     }
 
     public function edit($id)
