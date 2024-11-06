@@ -9,8 +9,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Estatísticas Rápidas -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                 <!-- Total de Condomínios -->
-                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <!-- Total de Condomínios -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <h3 class="text-lg font-medium">Total de Condomínios</h3>
                         <p class="text-2xl">{{ $totalCondominios}}</p>
@@ -32,7 +32,7 @@
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <h3 class="text-lg font-medium">Estatísticas</h3>
                         <p class="text-2xl">Gráficos</p>
-                        <a  class="text-blue-500">Ver gráficos</a>
+                        <a class="text-blue-500">Ver gráficos</a>
                     </div>
                 </div>
             </div>
@@ -70,8 +70,10 @@
                                     <td>{{ $reclamacao->created_at->format('d/m/Y H:i:s') }}</td>
                                     <td>{{ $reclamacao->updated_at->format('d/m/Y H:i:s') }}</td>
                                     <td>
-                                        <a href="{{ route('reclamacoes.show', $reclamacao->id) }}" class="text-blue-500">Ver</a>
-                                        <a href="{{ route('reclamacoes.edit', $reclamacao->id) }}" class="ml-2 text-yellow-500">Editar</a>
+                                        <a href="{{ route('reclamacoes.show', $reclamacao->id) }}"
+                                            class="text-blue-500">Ver</a>
+                                        <a href="{{ route('reclamacoes.edit', $reclamacao->id) }}"
+                                            class="ml-2 text-yellow-500">Editar</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -81,6 +83,14 @@
             </div>
         </div>
     </div>
+
+    <div style="width: 100%; margin-top: 20px;">
+        {!! $chart->container() !!}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {!! $chart->script() !!}
+
 
     <!-- Scripts para Gráficos (exemplo usando Chart.js) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

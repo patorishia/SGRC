@@ -17,6 +17,7 @@ class ReclamacaoController extends Controller
     {
         $reclamacoes = Reclamacao::with('tipoReclamacao', 'condominio', 'condomino', 'estado')->get();
         return view('reclamacoes.index', compact('reclamacoes'));
+        
     }
 
     public function create()
@@ -35,7 +36,7 @@ class ReclamacaoController extends Controller
             'condominio_id' => 'required|integer',
             'tipo_reclamacao_id' => 'required|integer',
             'descricao' => 'required|string',
-            ///'email' => 'required|email',
+            'email' => 'required|email',
         ]);
 
         // Define o estado como 'pendente'
@@ -48,20 +49,20 @@ class ReclamacaoController extends Controller
                 'condominio_id' => $request->condominio_id,
                 'tipo_reclamacao_id' => $request->tipo_reclamacao_id,
                 'descricao' => $request->descricao,
-                //'email' => $request->email,
+                'email' => $request->email,
             ]);
 
             return redirect()->route('reclamacoes.index')->with('success', 'Reclamação criada com sucesso!');
         
 
-        // Dados para enviar no email
-        /*$dados = [
-            'nome' => $request->nome, // Supondo que você tenha o nome do condômino
+         //Dados para enviar no email
+        $dados = [
+            'nome' => $request->nome, 
             'descricao' => $request->descricao,
         ];
 
-        // Enviar o email de notificação
-        Mail::to($request->email)->send(new NotificacaoEmail($dados));*/
+        //Enviar o email de notificação
+        Mail::to($request->email)->send(new NotificacaoEmail($dados));
 
     }
 
