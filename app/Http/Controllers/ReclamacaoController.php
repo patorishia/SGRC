@@ -15,15 +15,16 @@ class ReclamacaoController extends Controller
 {
     public function index()
     {
+        // Carrega todas as reclamações com as relações associadas
         $reclamacoes = Reclamacao::with('tipoReclamacao', 'condominio', 'condomino', 'estado')->get();
         return view('reclamacoes.index', compact('reclamacoes'));
-        
     }
 
     public function create()
     {
+        // Carrega todos os tipos de reclamação e condomínios
         $tiposReclamacao = TipoReclamacao::all();
-        $condominios = Condominio::all(); // Adiciona a lista de condomínios
+        $condominios = Condominio::all();
         return view('reclamacoes.create', compact('tiposReclamacao', 'condominios'));
     }
 
@@ -39,46 +40,46 @@ class ReclamacaoController extends Controller
             'email' => 'required|email',
         ]);
 
-        // Define o estado como 'pendente'
-        $estadoId = 1;
+        // Define o estado como 'pendente' ao criar uma nova reclamação
+        $estadoId = 1; // Considerando que '1' representa o estado 'pendente'
 
-        
-            Reclamacao::create([
-                'condomino_id' => $request->condomino_id,
-                'estado_id' => $estadoId,
-                'condominio_id' => $request->condominio_id,
-                'tipo_reclamacao_id' => $request->tipo_reclamacao_id,
-                'descricao' => $request->descricao,
-                'email' => $request->email,
-            ]);
+        // Criar a reclamação
+        $reclamacao = Reclamacao::create([
+            'condomino_id' => $request->condomino_id,
+            'estado_id' => $estadoId,
+            'condominio_id' => $request->condominio_id,
+            'tipo_reclamacao_id' => $request->tipo_reclamacao_id,
+            'descricao' => $request->descricao,
+            'email' => $request->email,
+        ]);
 
-            return redirect()->route('reclamacoes.index')->with('success', 'Reclamação criada com sucesso!');
-        
-
-         //Dados para enviar no email
+        // Dados para o e-mail de notificação
         $dados = [
-            'nome' => $request->nome, 
+            'nome' => $request->nome,
             'descricao' => $request->descricao,
         ];
 
-        //Enviar o email de notificação
+        // Envia o e-mail de notificação para o e-mail fornecido
         Mail::to($request->email)->send(new NotificacaoEmail($dados));
 
+        // Redireciona para a página de reclamações com uma mensagem de sucesso
+        return redirect()->route('reclamacoes.index')->with('success', 'Reclamação criada com sucesso!');
     }
 
     public function edit($id)
     {
+        // Obtém a reclamação e as opções para dropdowns
         $reclamacao = Reclamacao::findOrFail($id);
-        $condominios = Condominio::all(); // Obter todos os condomínios
-        $tiposReclamacao = TipoReclamacao::all(); // Obter todos os tipos de reclamação
-        $estadoReclamacao = Estado::all(); // Busca todos os status
+        $condominios = Condominio::all();
+        $tiposReclamacao = TipoReclamacao::all();
+        $estadoReclamacao = Estado::all();
 
         return view('reclamacoes.edit', compact('reclamacao', 'condominios', 'tiposReclamacao', 'estadoReclamacao'));
     }
 
     public function update(Request $request, $id)
     {
-        // Validação dos dados recebidos
+        // Valida os dados atualizados da reclamação
         $request->validate([
             'condomino_id' => 'required|integer',
             'condominio_id' => 'required|integer',
@@ -87,10 +88,10 @@ class ReclamacaoController extends Controller
             'estado_id' => 'required|integer',
         ]);
 
-        // Buscando a reclamação pelo ID e garantindo a integridade dos dados
+        // Busca a reclamação pelo ID
         $reclamacao = Reclamacao::findOrFail($id);
 
-        // Atualizando os dados da reclamação
+        // Atualiza os dados da reclamação
         $reclamacao->update([
             'condomino_id' => $request->condomino_id,
             'condominio_id' => $request->condominio_id,
@@ -104,15 +105,11 @@ class ReclamacaoController extends Controller
 
     public function destroy($id)
     {
-        // Encontre a reclamação pelo ID
+        // Encontra e exclui a reclamação pelo ID
         $reclamacao = Reclamacao::findOrFail($id);
-
-        // Exclua a reclamação
         $reclamacao->delete();
 
-        // Redirecione de volta para o índice com uma mensagem de sucesso
         return redirect()->route('reclamacoes.index')->with('success', 'Reclamação apagada com sucesso!');
     }
-
-
 }
+

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reclamacao;
 use App\Models\Condominio;
-use ConsoleTVs\Charts\Facades\Charts;
+use App\Models\TipoReclamacao;
 
 class DashboardController extends Controller
 {
@@ -12,28 +12,30 @@ class DashboardController extends Controller
     public function index()
     {
         $totalCondominios = Condominio::count();
-
-        // Contando as reclamações
         $totalReclamacoes = Reclamacao::count();
-
-        // Obtendo as últimas reclamações (supondo que você tenha essas colunas na tabela)
         $ultimasReclamacoes = Reclamacao::orderBy('created_at', 'desc')->take(5)->get();
 
-        // Exemplo de dados para o gráfico
-        $reclamacoesPorMes = Reclamacao::selectRaw('MONTH(created_at) as mes, COUNT(*) as total')
-            ->groupBy('mes')
+        // Procura apenas as reclamações com o estado "pendente"
+        $reclamacoesPendentes = Reclamacao::with('tipoReclamacao', 'condominio', 'condomino', 'estado')
+            ->where('estado_id', 1) // Filtra para mostrar apenas as pendentes
             ->get();
 
-        // Criar gráfico de barras
-        $chart = Charts::create('bar', 'chartjs')
-            ->title('Volume de Reclamações por Mês')
-            ->labels($reclamacoesPorMes->pluck('mes'))
-            ->values($reclamacoesPorMes->pluck('total'))
-            ->dimensions(1000, 500)
-            ->responsive(true);
+        $tiposLabels = TipoReclamacao::pluck('tipo')->toArray();
+        $tiposValues = TipoReclamacao::withCount('reclamacoes')->get()->pluck('reclamacoes_count')->toArray();
 
 
-        // Retornando a view com as variáveis necessárias
-        return view('dashboard', compact('totalReclamacoes', 'ultimasReclamacoes', 'totalCondominios', 'chart'));
+        // Obter número de reclamações por mês
+        $reclamacoesPorMes = Reclamacao::selectRaw("COUNT(*) as count, MONTHNAME(created_at) as month")
+            ->groupBy('month')
+            ->orderByRaw("MONTH(created_at)")
+            ->get();
+
+        // Extrair labels e valores para o gráfico
+        $labels = $reclamacoesPorMes->pluck('month');
+        $values = $reclamacoesPorMes->pluck('count');
+
+        // Passar dados para a view
+        return view('dashboard', compact('totalReclamacoes', 'ultimasReclamacoes', 'totalCondominios', 'labels', 'values', 'tiposLabels', 'tiposValues', 'reclamacoesPendentes'));
+
     }
 }
