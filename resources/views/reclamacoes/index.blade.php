@@ -9,6 +9,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white">
+                    <!-- Botões de Exportação -->
+                    <div style="margin-bottom: 20px;">
+                        <a href="{{ route('reclamacoes.export.excel') }}" class="btn btn-success">Exportar para
+                            Excel</a>
+                        <a href="{{ route('reclamacoes.export.pdf') }}" class="btn btn-danger">Exportar para PDF</a>
+                    </div>
                     <a href="{{ route('reclamacoes.create') }}" class="btn btn-primary mb-4">Adicionar Reclamação</a>
 
                     <table class="min-w-full divide-y divide-gray-200">
@@ -26,7 +32,7 @@
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Condomínio</th>
-                                    <th
+                                <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Estado</th>
                                 <th

@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use App\Mail\NotificacaoEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class ReclamacaoController extends Controller
 {
@@ -111,5 +114,52 @@ class ReclamacaoController extends Controller
 
         return redirect()->route('reclamacoes.index')->with('success', 'Reclamação apagada com sucesso!');
     }
+
+     // Método para exportar para Excel
+     public function exportReclamacoesToExcel()
+     {
+         $spreadsheet = new Spreadsheet();
+         $sheet = $spreadsheet->getActiveSheet();
+ 
+         $sheet->setCellValue('A1', 'ID');
+         $sheet->setCellValue('B1', 'Condominio');
+         $sheet->setCellValue('C1', 'Condómino');
+         $sheet->setCellValue('D1', 'Tipo Reclamação');
+         $sheet->setCellValue('E1', 'Estado');
+         $sheet->setCellValue('F1', 'Descrição');
+         $sheet->setCellValue('G1', 'Data Criação');
+         $sheet->setCellValue('H1', 'Última Atualização');
+ 
+         $reclamacoes = Reclamacao::all();
+         $row = 2;
+ 
+         foreach ($reclamacoes as $reclamacao) {
+             $sheet->setCellValue('A' . $row, $reclamacao->id);
+             $sheet->setCellValue('B' . $row, $reclamacao->condominio->nome);
+             $sheet->setCellValue('C' . $row, $reclamacao->condomino->nome);
+             $sheet->setCellValue('D' . $row, $reclamacao->tipoReclamacao->tipo);
+             $sheet->setCellValue('E' . $row, $reclamacao->Estado->nome);
+             $sheet->setCellValue('F' . $row, $reclamacao->descricao);
+             $sheet->setCellValue('G' . $row, $reclamacao->created_at);
+             $sheet->setCellValue('H' . $row, $reclamacao->updated_at);
+             $row++;
+         }
+ 
+         $writer = new Xlsx($spreadsheet);
+         $fileName = 'Reclamacoes.xlsx';
+         $writer->save($fileName);
+ 
+         return response()->download($fileName)->deleteFileAfterSend();
+     }
+ 
+     // Método para exportar para PDF
+     public function exportReclamacoesToPDF()
+     {
+         $reclamacoes = Reclamacao::all();
+         $pdf = PDF::loadView('pdf.reclamacoes', compact('reclamacoes'));
+         return $pdf->download('Reclamacoes.pdf');
+     }
+
+     
 }
 

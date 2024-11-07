@@ -26,9 +26,11 @@ Route::middleware('auth')->group(function () {
 // Rotas para condomínios (CRUD completo)
 Route::resource('condominios', CondominioController::class);
 
-// Rotas para reclamações (CRUD completo, apenas autenticadas)
 Route::middleware('auth')->group(function () {
+    // Rotas para reclamações e exportação
     Route::resource('reclamacoes', ReclamacaoController::class);
+    Route::get('/reclamacoes/export/excel', [ReclamacaoController::class, 'exportReclamacoesToExcel'])->name('reclamacoes.export.excel');
+    Route::get('/reclamacoes/export/pdf', [ReclamacaoController::class, 'exportReclamacoesToPDF'])->name('reclamacoes.export.pdf');
 });
 
 
