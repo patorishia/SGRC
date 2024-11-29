@@ -11,10 +11,11 @@ class Condominio extends Model
         'endereco',
         'cidade',
         'codigo_postal',
-        'data_criacao',
+        'created_at',
+        'updated_at',
     ];
 
-    protected $table = 'condominios'; // Nome da tabela no banco de dados
+    protected $table = 'condominio';
 
     public function condominos()
     {

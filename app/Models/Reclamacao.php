@@ -10,11 +10,11 @@ class Reclamacao extends Model
     protected $table = 'reclamacao'; 
 
     protected $fillable = [
-        'condomino_id', 'condominio_id', 'tipo_reclamacao', 'descricao', 'estado', 'data_criacao', 'data_resolucao'
+        'condomino_nif', 'condominio_id', 'tipo_reclamacao', 'descricao', 'estado', 'created_at', 'data_resolucao'
     ];
 
     protected $casts = [
-        'data_criacao' => 'datetime',
+        'created_at' => 'datetime',
         'data_resolucao' => 'datetime', // Se você tem este campo
     ];
 
@@ -23,7 +23,7 @@ class Reclamacao extends Model
     // Defina as relações
     public function condomino()
     {
-        return $this->belongsTo(Condomino::class, 'condomino_id');
+        return $this->belongsTo(Condomino::class, 'condomino_nif');
     }
 
     public function condominio()
@@ -35,5 +35,16 @@ class Reclamacao extends Model
     {
         return $this->belongsTo(TiposReclamacao::class, 'tipo_reclamacao');
     }
+
+// In the Reclamacao model
+// Em Reclamacao.php
+public function estado()
+{
+    return $this->belongsTo(Estado::class, 'estado', 'id');
+}
+
+
+
+
 }
 

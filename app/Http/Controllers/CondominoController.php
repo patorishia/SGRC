@@ -11,12 +11,13 @@ class CondominoController extends Controller
     {
         // Obtém todos os condominos da tabela 'condomino'
         $condominos = Condomino::all(); 
-        return view('gerente.index', compact('condominos')); // Retorna a view de condominos
+        return view('gerente.index', compact('condominos'), ['pageTitle' => 'Condôminos']); // Retorna a view de condominos~
+        
     }
 
-    public function show($id)
+    public function show($nif)
     {
-        $condomino = Condomino::findOrFail($id); // Busca o condomino pelo ID
+        $condomino = Condomino::findOrFail($nif); // Busca o condomino pelo nif
         return view('gerente.show', compact('condomino')); // Retorna a view com os detalhes
     }
 
@@ -26,26 +27,26 @@ class CondominoController extends Controller
         return view('gerente.create', compact('condominios'));
     }
 
-    public function edit($id)
+    public function edit($nif)
     {
-        $condomino = Condomino::findOrFail($id);
+        $condomino = Condomino::findOrFail($nif);
         $condominios = Condominio::all(); // Obtenha todos os condomínios para o dropdown
         return view('gerente.update', compact('condomino', 'condominios'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $nif)
     {
         $request->validate([
             'nome' => 'required|string|max:255',
             'email' => 'required|email',
             'telefone' => 'required|string|max:15',
-            'condominio_id' => 'required|exists:condominios,id', // Certifique-se de que a relação é válida
+            'condominio_id' => 'required|exists:condominio,id', // Certifique-se de que a relação é válida
         ]);
     
-        $condomino = Condomino::findOrFail($id);
+        $condomino = Condomino::findOrFail($nif);
         $condomino->update($request->all());
     
-        return redirect()->route('condominos.show', $id)->with('success', 'Condomino atualizado com sucesso.');
+        return redirect()->route('condominos.show', $nif)->with('success', 'Condomino atualizado com sucesso.');
     }
     
     public function store(Request $request)
@@ -54,7 +55,7 @@ class CondominoController extends Controller
         'nome' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:condomino',
         'telefone' => 'required|string|max:255',
-        'condominio_id' => 'required|exists:condominios,id', // Aqui o nome da tabela está correto
+        'condominio_id' => 'required|exists:condominio,id', // Aqui o nome da tabela está correto
     ]);
 
     // Adiciona o novo condomino
@@ -68,14 +69,28 @@ class CondominoController extends Controller
     return redirect()->route('gerente.index')->with('success', 'Condomino criado com sucesso.');
 }
 
-public function destroy($id)
-    {
-        // Encontre o condomino pelo ID e delete
-        $condomino = Condomino::findOrFail($id);
-        $condomino->delete();
+public function destroy($nif)
+{
+    $condomino = Condomino::findOrFail($nif);
 
-        // Redirecionar de volta para o índice com uma mensagem de sucesso
-        return redirect()->route('condominos.index')->with('success', 'Condomino apagado com sucesso.');
+    // Verificar se o condomino tem reclamações associadas
+    $hasReclamacao = $condomino->reclamacoes()->exists();
+
+    if ($hasReclamacao) {
+        // Se o condomino tiver reclamações, retornar para a página de show com a mensagem de erro
+        return redirect()->route('condominos.show', $nif)
+                         ->with('error', 'Este condomino não pode ser apagado pois tem uma reclamação associada.');
     }
+
+    // Caso contrário, apague o condomino
+    $condomino->delete();
+
+    // Redirecionar para a lista de condominos com a mensagem de sucesso
+    return redirect()->route('gerente.index')
+                     ->with('success', 'Condomino apagado com sucesso.');
+}
+
+
+
 }
 

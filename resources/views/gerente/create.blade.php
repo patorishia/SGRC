@@ -7,30 +7,46 @@
 @endsection
 
 @section('content')
-    <div class="p-6 text-gray-900 dark:text-gray-100">
-        <form action="{{ route('gerente.store') }}" method="POST">
-            @csrf
-            <div>
-                <label for="nome">Nome</label>
-                <input type="text" name="nome" required>
+    <!-- Card principal com margem adequada -->
+    <div class="container mx-auto mt-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-blue-600 text-white">
+                <h3 class="card-title">Adicionar Condomino</h3>
             </div>
-            <div>
-                <label for="email">Email</label>
-                <input type="email" name="email" required>
+
+            <div class="card-body">
+                <form action="{{ route('gerente.store') }}" method="POST">
+                    @csrf
+
+                    <div class="form-group">
+                        <label for="nome" class="control-label">Nome:</label>
+                        <input type="text" name="nome" id="nome" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="control-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefone" class="control-label">Telefone:</label>
+                        <input type="text" name="telefone" id="telefone" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="condominio_id" class="control-label">Condomínio:</label>
+                        <select name="condominio_id" id="condominio_id" class="form-control" required>
+                            @foreach($condominios as $condominio)
+                                <option value="{{ $condominio->id }}">{{ $condominio->nome }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        Criar Condomino
+                    </button>
+                </form>
             </div>
-            <div>
-                <label for="telefone">Telefone</label>
-                <input type="text" name="telefone" required>
-            </div>
-            <div>
-                <label for="condominio_id">Condomínio</label>
-                <select name="condominio_id" required>
-                    @foreach($condominios as $condominio)
-                        <option value="{{ $condominio->id }}">{{ $condominio->nome }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <button type="submit">Criar Condomino</button>
-        </form>
+        </div>
     </div>
 @endsection

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Condomino extends Model
 {
     use HasFactory;
-
+    protected $primaryKey = 'nif'; // Replace 'nif' with the actual primary key
     protected $table = 'condomino'; // Nome da tabela
     
     public function condominio()
@@ -18,7 +18,7 @@ class Condomino extends Model
 
     public function reclamacoes()
 {
-    return $this->hasMany(Reclamacao::class, 'condomino_id');
+    return $this->hasMany(Reclamacao::class, 'condomino_nif');
 }
 
 
@@ -27,6 +27,6 @@ class Condomino extends Model
         'email',
         'telefone',
         'condominio_id',
-        'data_criacao',
+        'created_at',
     ];
 }

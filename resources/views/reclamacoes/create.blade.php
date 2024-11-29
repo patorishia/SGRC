@@ -7,50 +7,106 @@
 @endsection
 
 @section('content')
-    <div class="p-6 text-gray-900 dark:text-gray-100">
-        <form action="{{ route('reclamacoes.store') }}" method="POST">
-            @csrf
-
-            <div class="mb-4">
-                <label for="condominio_id" class="block text-gray-700">Condomínio:</label>
-                <select name="condominio_id" id="condominio_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
-                    @foreach($condominios as $condominio)
-                        <option value="{{ $condominio->id }}">{{ $condominio->nome }}</option>
-                    @endforeach
-                </select>
+    <!-- Card principal com margem adequada -->
+    <div class="container mx-auto mt-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-blue-600 text-white">
+                <h3 class="card-title">Criar Reclamação</h3>
             </div>
 
-            <div class="mb-4">
-                <label for="condomino_id" class="block text-gray-700">Condomínio:</label>
-                <select name="condomino_id" id="condomino_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
-                    @foreach($condominos as $condomino)
-                        <option value="{{ $condomino->id }}">{{ $condomino->nome }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <div class="card-body">
+                <form action="{{ route('reclamacoes.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
 
-            <div class="mb-4">
-                <label for="tipo_reclamacao" class="block text-gray-700">Tipo de Reclamação:</label>
-                <select name="tipo_reclamacao" id="tipo_reclamacao" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
-                    @foreach($tiposReclamacao as $tipo)
-                        <option value="{{ $tipo->id }}">{{ $tipo->tipo }}</option>
-                    @endforeach
-                </select>
-            </div>
+                    <div class="form-group">
+    <label for="condominio_id" class="control-label">Condomínio:</label>
+    <select name="condominio_id" id="condominio_id" class="form-control" required>
+        <option value="" disabled selected>Selecione um Condomínio</option>
+        @foreach($condominios as $condominio)
+            <option value="{{ $condominio->id }}">{{ $condominio->nome }}</option>
+        @endforeach
+    </select>
+</div>
 
-            <div class="mb-4">
-                <label for="descricao" class="block text-gray-700">Descrição:</label>
-                <textarea name="descricao" id="descricao" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required></textarea>
-            </div>
+<div class="form-group">
+    <label for="condomino_nif" class="control-label">Condomínio:</label>
+    <select name="condomino_nif" id="condomino_nif" class="form-control" required>
+        <option value="" disabled selected>Selecione um Condomínio</option>
+        @foreach($condominos as $condomino)
+            <option value="{{ $condomino->nif }}">{{ $condomino->nome }}</option>
+        @endforeach
+    </select>
+</div>
 
-            <div class="mb-4">
-                <label for="estado" class="block text-gray-700">Estado:</label>
-                <input type="text" name="estado" id="estado" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
-            </div>
+<div class="form-group">
+    <label for="tipo_reclamacao" class="control-label">Tipo de Reclamação:</label>
+    <select name="tipo_reclamacao" id="tipo_reclamacao" class="form-control" required>
+        <option value="" disabled selected>Selecione o Tipo de Reclamação</option>
+        @foreach($tiposReclamacao as $tipo)
+            <option value="{{ $tipo->id }}">{{ $tipo->tipo }}</option>
+        @endforeach
+    </select>
+</div>
 
-            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Criar Reclamação
-            </button>
-        </form>
+
+                    <div class="form-group">
+                        <label for="descricao" class="control-label">Descrição:</label>
+                        <textarea name="descricao" id="descricao" class="form-control" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estado" class="control-label">Estado:</label>
+                        <select name="estado" id="estado" class="form-control" required>
+                            @foreach($estados as $estado)
+                                <option value="{{ $estado->id }}">{{ $estado->nome }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="anexos" class="control-label">Adicionar ou atualizar anexos:</label>
+                        <input type="file" name="anexos[]" id="anexos" class="form-control" multiple>
+                    </div>
+
+                    <!-- Campos de nome para os anexos -->
+                    <div id="anexo_nome_fields"></div>
+
+                    <button type="submit" class="btn btn-success">
+                        Criar Reclamação
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
+
+    @push('scripts')
+        <script>
+            document.getElementById('anexos').addEventListener('change', function() {
+                var container = document.getElementById('anexo_nome_fields');
+                container.innerHTML = ''; // Limpa os campos de nome existentes
+
+                // Cria campos de nome para cada arquivo selecionado
+                for (let i = 0; i < this.files.length; i++) {
+                    var inputGroup = document.createElement('div');
+                    inputGroup.classList.add('form-group');
+
+                    var label = document.createElement('label');
+                    label.setAttribute('for', 'anexo_nome_' + i);
+                    label.classList.add('control-label');
+                    label.textContent = 'Nome do anexo ' + (i + 1) + ':'; 
+
+                    var input = document.createElement('input');
+                    input.setAttribute('type', 'text');
+                    input.setAttribute('name', 'anexo_nome[]');
+                    input.setAttribute('id', 'anexo_nome_' + i);
+                    input.classList.add('form-control');
+                    input.setAttribute('placeholder', 'Nome do anexo ' + (i + 1));
+
+                    inputGroup.appendChild(label);
+                    inputGroup.appendChild(input);
+                    container.appendChild(inputGroup);
+                }
+            });
+        </script>
+    @endpush
 @endsection

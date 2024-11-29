@@ -1,125 +1,268 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Estatísticas Rápidas -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                 <!-- Total de Condomínios -->
-                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-medium">Total de Condomínios</h3>
-                        <p class="text-2xl">{{ $totalCondominios}}</p>
-                        <a href="{{ route('condominios.index') }}" class="text-blue-500">Ver todas os Condomínios</a>
-                    </div>
-                </div>
-                <!-- Total de Reclamações -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-medium">Total de Reclamações</h3>
-                        <p class="text-2xl">{{ $totalReclamacoes }}</p>
-                        <a href="{{ route('reclamacoes.index') }}" class="text-blue-500">Ver todas as reclamações</a>
-                    </div>
-                </div>
+@section('content')
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <!-- Reclamações Pendentes -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-medium">Reclamações Pendentes</h3>
-                        <p class="text-2xl">{{ $reclamacoesPendentes }}</p>
-                        <a href="{{ route('reclamacoes.pendentes') }}" class="text-blue-500">Ver pendentes</a>
+<div class="content">
+    <div class="container-fluid">
+        <!-- Estatísticas -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{ $totalCondominios }}</h3>
+                        <p>Total de Condomínios</p>
                     </div>
-                </div>
-
-                <!-- Reclamações Resolvidas -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-medium">Reclamações Resolvidas</h3>
-                        <p class="text-2xl">{{ $reclamacoesResolvidas }}</p>
-                        <a href="{{ route('reclamacoes.resolvidas') }}" class="text-blue-500">Ver resolvidas</a>
+                    <div class="icon">
+                        <i class="fas fa-building"></i>
                     </div>
+                    <a href="{{ route('condominios.index') }}" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
+            </div>
 
-                <!-- Acesso a Gráficos -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-medium">Estatísticas</h3>
-                        <p class="text-2xl">Gráficos</p>
-                        <a  class="text-blue-500">Ver gráficos</a>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ $totalReclamacoes }}</h3>
+                        <p>Total de Reclamações</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <a href="{{ route('reclamacoes.index') }}" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Gráfico de Reclamações</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="reclamacoesChart" style="max-height: 200px; width: 100%;"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Gráficos Interativos (Placeholder para gráficos dinâmicos) -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium">Gráficos de Reclamações</h3>
-                    <!-- Espaço para renderizar gráficos com bibliotecas como Chart.js ou outra de sua escolha -->
-                    <div>
-                        <canvas id="reclamacoesChart"></canvas>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Distribuição por Tipo</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="tipoReclamacaoChart" style="max-height: 200px; width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Evolução no Tempo</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="evolucaoReclamacoesChart" style="max-height: 200px; width: 100%;"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Últimas Reclamações -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium">Últimas Reclamações</h3>
-                    <table class="min-w-full mt-4">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Descrição</th>
-                                <th>Data de Criação</th>
-                                <th>Última Atualização</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($ultimasReclamacoes as $reclamacao)
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Comparação entre Tipos</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="radarReclamacaoChart" style="max-height: 200px; width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabelas -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Últimas Reclamações</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="ultimasReclamacoesTable" class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{ $reclamacao->id }}</td>
-                                    <td>{{ $reclamacao->descricao }}</td>
-                                    <td>{{ $reclamacao->data_criacao->format('d/m/Y H:i:s') }}</td>
-                                    <td>
-                                        <a href="{{ route('reclamacoes.show', $reclamacao->id) }}" class="text-blue-500">Ver</a>
-                                        <a href="{{ route('reclamacoes.edit', $reclamacao->id) }}" class="ml-2 text-yellow-500">Editar</a>
-                                    </td>
+                                    <th>Condómino</th>
+                                    <th>Condomínio</th>
+                                    <th>Descrição</th>
+                                    <th>Data de Criação</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($ultimasReclamacoes as $reclamacao)
+                                    <tr>
+                                        <td>{{ $reclamacao->condomino->nome }}</td>
+                                        <td>{{ $reclamacao->condominio->nome }}</td>
+                                        <td>{{ $reclamacao->descricao }}</td>
+                                        <td>{{ $reclamacao->created_at->format('d/m/Y H:i:s') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Reclamações Pendentes</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="reclamacoesPendentesTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Condómino</th>
+                                    <th>Condomínio</th>
+                                    <th>Descrição</th>
+                                    <th>Data de Criação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($reclamacoesPendentes as $reclamacao)
+                                    <tr>
+                                        <td>{{ $reclamacao->condomino->nome }}</td>
+                                        <td>{{ $reclamacao->condominio->nome }}</td>
+                                        <td>{{ $reclamacao->descricao }}</td>
+                                        <td>{{ $reclamacao->created_at->format('d/m/Y H:i:s') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Scripts para Gráficos (exemplo usando Chart.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('reclamacoesChart').getContext('2d');
-        const reclamacoesChart = new Chart(ctx, {
-            type: 'bar', // Tipo de gráfico
-            data: {
-                labels: ['Total', 'Pendentes', 'Resolvidas'], // Rótulos
-                datasets: [{
-                    label: 'Reclamações',
-                    data: [{{ $totalReclamacoes }}, {{ $reclamacoesPendentes }}, {{ $reclamacoesResolvidas }}], // Dados
-                    backgroundColor: ['#f87171', '#fbbf24', '#34d399'], // Cores
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Inicialização dos gráficos
+    const ctx = document.getElementById('reclamacoesChart').getContext('2d');
+    const reclamacoesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($labels) !!},
+            datasets: [{
+                label: 'Reclamações por Mês',
+                data: {!! json_encode($values) !!},
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
+        }
+    });
+
+    const ctxPizza = document.getElementById('tipoReclamacaoChart').getContext('2d');
+    const tipoReclamacaoChart = new Chart(ctxPizza, {
+        type: 'pie',
+        data: {
+            labels: {!! json_encode($tiposLabels) !!},
+            datasets: [{
+                label: 'Distribuição de Reclamações por Tipo',
+                data: {!! json_encode($tiposValues) !!},
+                backgroundColor: ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#9e89ff'],
+                borderColor: 'rgba(0, 0, 0, 0.1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    const ctxLinha = document.getElementById('evolucaoReclamacoesChart').getContext('2d');
+    const evolucaoReclamacoesChart = new Chart(ctxLinha, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($labels) !!},
+            datasets: [{
+                label: 'Reclamações por Mês',
+                data: {!! json_encode($values) !!},
+                borderColor: '#34d399',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const ctxRadar = document.getElementById('radarReclamacaoChart').getContext('2d');
+    const radarReclamacaoChart = new Chart(ctxRadar, {
+        type: 'radar',
+        data: {
+            labels: {!! json_encode($tiposLabels) !!},
+            datasets: [{
+                label: 'Tipos de Reclamações',
+                data: {!! json_encode($tiposValues) !!},
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {}
+        }
+    });
+
+    // Inicialização do DataTables
+    $(document).ready(function() {
+        $('#ultimasReclamacoesTable').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese.json"
+            }
         });
-    </script>
-</x-app-layout>
+
+        $('#reclamacoesPendentesTable').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese.json"
+            }
+        });
+    });
+</script>
+
+@endsection

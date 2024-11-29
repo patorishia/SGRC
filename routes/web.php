@@ -12,9 +12,11 @@ use App\Http\Controllers\CondominoController;
 use App\Http\Controllers\TiposReclamacaoController;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
+
 // Rotas de senha
 Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
 
 // Rota de tipos de reclamação
 Route::resource('tipos_reclamacao', TiposReclamacaoController::class);
@@ -34,6 +36,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/reclamacoes', [ReclamacaoController::class, 'store'])->name('reclamacoes.store');
     Route::get('/reclamacoes/pendentes', [ReclamacaoController::class, 'pendentes'])->name('reclamacoes.pendentes');
     Route::get('/reclamacoes/resolvidas', [ReclamacaoController::class, 'resolvidas'])->name('reclamacoes.resolvidas');
+    Route::get('/reclamacoes/export/excel', [ReclamacaoController::class, 'exportReclamacoesToExcel'])->name('reclamacoes.export.excel');
+    Route::get('/reclamacoes/export/pdf', [ReclamacaoController::class, 'exportReclamacoesToPDF'])->name('reclamacoes.export.pdf');
 });
 
 // Rota para listar todos os condomínios e gerenciar condomínios
@@ -41,9 +45,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/gerente', [CondominoController::class, 'index'])->name('gerente.index');
     Route::resource('condominos', CondominoController::class);
     Route::get('/gerente/create', [CondominoController::class, 'create'])->name('gerente.create');
-    Route::get('/gerente/{id}', [CondominoController::class, 'show'])->name('gerente.show');
-    Route::put('/gerente/{id}', [CondominoController::class, 'update'])->name('gerente.update');
+    Route::get('/gerente/{nif}', [CondominoController::class, 'show'])->name('gerente.show');
+    Route::put('/gerente/{nif}', [CondominoController::class, 'update'])->name('gerente.update');
     Route::post('/gerente', [CondominoController::class, 'store'])->name('gerente.store');
+    
 });
 
 // Rota para a home page

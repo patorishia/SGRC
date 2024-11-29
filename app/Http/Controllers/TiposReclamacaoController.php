@@ -10,7 +10,7 @@ class TiposReclamacaoController extends Controller
     public function index()
     {
         $tiposReclamacao = TiposReclamacao::all();
-        return view('tipos_reclamacao.index', compact('tiposReclamacao'));
+        return view('tipos_reclamacao.index', compact('tiposReclamacao'), ['pageTitle' => 'Tipos de Reclamação']);
     }
 
     public function create()
@@ -53,7 +53,19 @@ class TiposReclamacaoController extends Controller
 
     public function destroy(TiposReclamacao $tiposReclamacao)
     {
+        // Verifica se o tipo de reclamação está sendo utilizado em algum outro lugar
+        if ($tiposReclamacao->reclamacoes()->count() > 0) {
+            // Se o tipo estiver sendo usado, retorna uma mensagem de erro
+            return back()->with('error', 'Este tipo de reclamação está sendo utilizado em outra(s) reclamação(ões) e não pode ser apagado.');
+        }
+    
+        // Caso contrário, apaga o tipo de reclamação
         $tiposReclamacao->delete();
-        return redirect()->route('tipos_reclamacao.index')->with('success', 'Tipo de reclamação apagado com sucesso.');
+        return redirect()->route('tipos_reclamacao.index')->with('success', 'Tipo de Reclamação apagado com sucesso!');
     }
+    
+
+    
+
+
 }

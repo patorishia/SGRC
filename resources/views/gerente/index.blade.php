@@ -1,38 +1,69 @@
 @extends('layouts.app')
 
 @section('header')
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Condomínos') }}
-    </h2>
+    <h1 class="m-0 text-dark">{{ __('Condomínos') }}</h1>
 @endsection
 
 @section('content')
-    <div class="p-6 text-gray-900 dark:text-gray-100">
-        <!-- Botão para adicionar condomino -->
-        <div class="mb-4">
-            <a href="{{ route('gerente.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Adicionar Condomíno
-            </a>
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Verificar se existem condomínios -->
+            @if($condominos->isEmpty())
+                <div class="col-12 text-center">
+                    <p class="text-muted">{{ __('Ainda não há nenhum condomíno.') }}</p>
+                </div>
+            @else
+                <div class="col-12">
+                    <!-- Cards com a listagem dos condomínios -->
+                    <div class="row">
+                        @php
+                            // Definir as cores aleatórias para os cards
+                            $colors = ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8', '#6c757d']; // Hex colors
+                            $colorCount = count($colors);
+                        @endphp
+                        @foreach($condominos as $index => $condomino)
+                            @php
+                                // Atribuir cor aleatória
+                                $color = $colors[$index % $colorCount]; // A cor será rotacionada
+                            @endphp
+                            <div class="col-md-4 mb-4">
+                                <div class="card shadow-lg" style="background-color: rgba({{ hex2rgb($color) }}, 0.8);">
+                                    <div class="card-header text-white">
+                                        <h5 class="card-title">{{ $condomino->nome }}</h5>
+                                    </div>
+                                    <div class="card-body bg-light text-center text-dark">
+                                        <p><strong>Email:</strong> {{ $condomino->email }}</p>
+                                        <p><strong>Telefone:</strong> {{ $condomino->telefone }}</p>
+                                        <a href="{{ route('gerente.show', $condomino->nif) }}" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i> {{ __('Ver detalhes') }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
 
-        <!-- Listagem de condominos -->
-        @if($condominos->isEmpty())
-            <div class="text-center">
-                <p class="text-lg text-gray-500">{{ __('Ainda não há nenhum condomino.') }}</p>
+        <!-- Botão para adicionar condomíno -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="{{ route('gerente.create') }}" class="btn btn-success">
+                    <i class="fas fa-plus-circle"></i> {{ __('Adicionar Condomíno') }}
+                </a>
             </div>
-        @else
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    @foreach($condominos as $condomino)
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-            <a href="{{ route('gerente.show', $condomino->id) }}" class="font-semibold text-lg text-gray-800 dark:text-gray-200">
-                {{ $condomino->nome }}
-            </a>
-            <p class="text-gray-600 dark:text-gray-400">Email: {{ $condomino->email }}</p>
-            <p class="text-gray-600 dark:text-gray-400">Telefone: {{ $condomino->telefone }}</p>
         </div>
-    @endforeach
-</div>
-
-        @endif
     </div>
 @endsection
+
+@php
+    // Função para converter hex em rgb
+    function hex2rgb($hex) {
+        $hex = str_replace("#", "", $hex);
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+        return "$r, $g, $b";
+    }
+@endphp

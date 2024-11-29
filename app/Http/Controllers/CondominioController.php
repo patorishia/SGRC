@@ -12,7 +12,7 @@ class CondominioController extends Controller
     $condominios = Condominio::all();
 
     // Remova a linha de depuração e passe os dados diretamente para a view
-    return view('condominios.index', compact('condominios'));
+    return view('condominios.index', compact('condominios'),['pageTitle' => 'Condomínios']);
 }
 
 
@@ -23,16 +23,28 @@ public function show($id)
 }
 
 public function destroy($id)
-    {
-        // Encontra o condomínio pelo ID
-        $condominio = Condominio::findOrFail($id);
+{
+    $condominio = Condominio::findOrFail($id);
 
-        // Exclui o condomínio
-        $condominio->delete();
+    // Verificar se o condomínio tem algum condomino ou reclamação associada
+    $hasCondomino = $condominio->condominos()->exists();
+    $hasReclamacao = $condominio->reclamacoes()->exists();
 
-        // Redireciona para a página de listagem com uma mensagem de sucesso
-        return redirect()->route('condominios.index')->with('success', 'Condomínio excluído com sucesso!');
+    if ($hasCondomino || $hasReclamacao) {
+        // Se houver, não pode apagar e retorna com uma mensagem de erro
+        return redirect()->route('condominios.show', $id)
+                         ->with('error', 'Este condomínio não pode ser apagado pois tem um condômino ou reclamação associada.');
     }
+
+    // Caso contrário, apague o condomínio
+    $condominio->delete();
+
+    // Redirecionar para o índice com uma mensagem de sucesso
+    return redirect()->route('condominios.index')
+                     ->with('success', 'Condomínio apagado com sucesso.');
+}
+
+
 
     public function create()
     {
