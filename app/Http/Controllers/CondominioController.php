@@ -12,7 +12,7 @@ class CondominioController extends Controller
     $condominios = Condominio::all();
 
     // Remova a linha de depuração e passe os dados diretamente para a view
-    return view('condominios.index', compact('condominios'),['pageTitle' => 'Condomínios']);
+    return view('condominios.index', compact('condominios'),['pageTitle' => __('Condomínios')]);
 }
 
 

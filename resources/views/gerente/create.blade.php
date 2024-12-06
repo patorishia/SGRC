@@ -2,7 +2,7 @@
 
 @section('header')
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Adicionar Condomino') }}
+        {{ __('Titulo') }}
     </h2>
 @endsection
 
@@ -11,7 +11,7 @@
     <div class="container mx-auto mt-8">
         <div class="card shadow-lg">
             <div class="card-header bg-blue-600 text-white">
-                <h3 class="card-title">Adicionar Condomino</h3>
+                <h3 class="card-title">{{ __('Adicionar Condómino') }}</h3>
             </div>
 
             <div class="card-body">
@@ -19,22 +19,22 @@
                     @csrf
 
                     <div class="form-group">
-                        <label for="nome" class="control-label">Nome:</label>
+                        <label for="nome" class="control-label">{{ __('Nome:') }}</label>
                         <input type="text" name="nome" id="nome" class="form-control" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="email" class="control-label">Email:</label>
+                        <label for="email" class="control-label">{{ __('Email:') }}</label>
                         <input type="email" name="email" id="email" class="form-control" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="telefone" class="control-label">Telefone:</label>
+                        <label for="telefone" class="control-label">{{ __('Telefone:') }}</label>
                         <input type="text" name="telefone" id="telefone" class="form-control" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="condominio_id" class="control-label">Condomínio:</label>
+                        <label for="condominio_id" class="control-label">{{ __('Condomínio:') }}</label>
                         <select name="condominio_id" id="condominio_id" class="form-control" required>
                             @foreach($condominios as $condominio)
                                 <option value="{{ $condominio->id }}">{{ $condominio->nome }}</option>
@@ -43,7 +43,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-success">
-                        Criar Condomino
+                        {{ __('Criar Condómino') }}
                     </button>
                 </form>
             </div>

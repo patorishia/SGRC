@@ -1,54 +1,82 @@
 @extends('layouts.app')
 
 @section('header')
-    <h1 class="m-0 text-dark">{{ __('Detalhes do Condomino') }}: {{ $condomino->nome }}</h1>
+    <h1 class="m-0 text-dark">{{ __('Detalhes do Condómino') }}: {{ $condomino->nome }}</h1>
 @endsection
 
 @section('content')
     <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-12">
-                <div class="card shadow-lg">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title">{{ __('Detalhes do Condomino') }}: {{ $condomino->nome }}</h5>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Nome:</strong> {{ $condomino->nome }}</p>
-                        <p><strong>Email:</strong> {{ $condomino->email }}</p>
-                        <p><strong>Telefone:</strong> {{ $condomino->telefone }}</p>
-                        <p><strong>Condomínio:</strong> {{ optional($condomino->condominio)->nome }}</p> <!-- Assumindo que você tenha uma relação definida -->
-                        <p><strong>Data de Criação:</strong> {{ $condomino->created_at->format('d/m/Y') }}</p>
-                        <p><strong>Data de Atualização:</strong> {{ $condomino->updated_at->format('d/m/Y') }}</p>
-
-                        <!-- Exibir a notificação de erro ou sucesso -->
-                        @if(session('error'))
-                            <div id="error-message" class="alert alert-danger mt-4">
-                                {{ session('error') }}
-                            </div>
-                        @elseif(session('success'))
-                            <div id="success-message" class="alert alert-success mt-4">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-
-                        @if(auth()->user()->role === 'admin')
-                            <div class="mt-4">
-                                <a href="{{ route('condominos.edit', $condomino->nif) }}" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Editar
-                                </a>
-
-                                <!-- Formulário para excluir o condomíno -->
-                                <form action="{{ route('condominos.destroy', $condomino->nif) }}" method="POST" class="inline-block mt-2">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja apagar este condomíno?')">
-                                        <i class="fas fa-trash-alt"></i> {{ __('Apagar') }}
-                                    </button>
-                                </form>
-                            </div>
-                        @endif
-                    </div>
+                <!-- Título do Condomínio -->
+                <h3 class="text-dark mb-4">{{ __('Detalhes do Condómino') }}: <span class="text-primary">{{ $condomino->nome }}</span></h3>
+                
+                <!-- Tabela com os detalhes do Condomínio -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th class="text-center">{{ __('Campo') }}</th>
+                                <th class="text-center">{{ __('Valor') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Nome') }}</strong></td>
+                                <td>{{ $condomino->nome }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Email') }}</strong></td>
+                                <td>{{ $condomino->email }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Telefone') }}</strong></td>
+                                <td>{{ $condomino->telefone }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Condomínio') }}</strong></td>
+                                <td>{{ optional($condomino->condominio)->nome }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Data de Criação') }}</strong></td>
+                                <td>{{ $condomino->created_at->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Data de Atualização') }}</strong></td>
+                                <td>{{ $condomino->updated_at->format('d/m/Y') }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
+                <!-- Exibir a notificação de erro ou sucesso -->
+                @if(session('error'))
+                    <div id="error-message" class="alert alert-danger mt-4 rounded">
+                        <i class="fas fa-exclamation-triangle"></i> {{ session('error') }}
+                    </div>
+                @elseif(session('success'))
+                    <div id="success-message" class="alert alert-success mt-4 rounded">
+                        <i class="fas fa-check-circle"></i> {{ session('success') }}
+                    </div>
+                @endif
+
+                <!-- Botões de ações para admin -->
+                @if(auth()->user()->role === 'admin')
+                    <div class="mt-4">
+                        <a href="{{ route('condominos.edit', $condomino->nif) }}" class="btn btn-warning btn-sm rounded-pill">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+
+                        <!-- Formulário para excluir o condomínio -->
+                        <form action="{{ route('condominos.destroy', $condomino->nif) }}" method="POST" class="inline-block mt-2">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm rounded-pill" onclick="return confirm('Tem certeza que deseja apagar este condomínio?')">
+                                <i class="fas fa-trash-alt"></i> {{ __('Apagar') }}
+                            </button>
+                        </form>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

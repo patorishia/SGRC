@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resetar Senha</title>
+    <title>{{ __('Resetar Senha') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -101,38 +101,38 @@
 <body>
     <div class="bg-blue-500 shadow-lg rounded-lg max-w-2xl w-full flex text-white">
         <div class="w-full bg-white rounded-lg p-8 text-gray-800">
-            <h2 class="text-2xl font-semibold text-center mb-4">Redefinir Password</h2>
-            <p class="text-gray-600 text-center mb-6">Insira seu e-mail abaixo para receber o link de redefinição da password.</p>
+            <h2 class="text-2xl font-semibold text-center mb-4">{{ __('Redefinir Password') }}</h2>
+            <p class="text-gray-600 text-center mb-6">{{ __('Insira o seu e-mail abaixo para receber o link de redefinição da password.') }}</p>
 
             <form method="POST" action="{{ route('password.email') }}" class="space-y-4" id="resetPasswordForm">
                 @csrf
                 <div>
-                    <input type="email" name="email" placeholder="E-mail" class="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-500" required>
+                    <input type="email" name="email" placeholder="{{ __('E-mail') }}" class="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-500" required>
                 </div>
                 <button type="submit" class="loading-button w-full bg-gradient-to-tr from-indigo-100 to-indigo-900 hover:bg-gradient-to-tr hover:from-indigo-200 hover:to-indigo-800 text-white font-semibold py-3 rounded-md transition duration-300" id="submitButton">
-                    Enviar Link de Redefinição da Password
+                    {{ __('Enviar Link de Redefinição da Password') }}
                 </button>
                 <!-- Barra de loading -->
                 <div id="loadingBar" class="loading-bar" style="display: none;"></div>
             </form>
             <p class="text-center text-sm text-gray-600 mt-6">
-                Lembrou-se da sua Password? <a href="{{ route('home') }}" class="text-link">Faça login</a>.
+                {{ __('Lembrou-se da sua Password?') }} <a href="{{ route('home') }}" class="text-link">{{ __('Faça login') }}</a>.
             </p>
         </div>
     </div>
 
     <!-- Pop-up de erro -->
     <div class="popup" id="errorPopup">
-        <div class="popup-header">Erro</div>
-        <div id="errorMessage">Mensagem de erro aqui.</div>
-        <button class="popup-button" id="closePopup">Fechar</button>
+        <div class="popup-header">{{ __('Erro') }}</div>
+        <div id="errorMessage">{{ __('Mensagem de erro aqui.') }}</div>
+        <button class="popup-button" id="closePopup">{{ __('Fechar') }}</button>
     </div>
 
     <!-- Pop-up de sucesso -->
     <div class="popup popup-success" id="successPopup">
-        <div class="popup-header">Sucesso</div>
-        <div id="successMessage">O e-mail de redefinição foi enviado com sucesso!</div>
-        <button class="popup-button" id="goHomeButton">Voltar para o Login!</button>
+        <div class="popup-header">{{ __('Sucesso') }}</div>
+        <div id="successMessage">{{ __('O e-mail de redefinição foi enviado com sucesso!') }}</div>
+        <button class="popup-button" id="goHomeButton">{{ __('Voltar para o Login!') }}</button>
     </div>
 
     <script>

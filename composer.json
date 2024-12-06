@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^3.0",
         "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^11.9",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "mailgun/mailgun-php": "^4.3",
         "phpoffice/phpspreadsheet": "^3.5",

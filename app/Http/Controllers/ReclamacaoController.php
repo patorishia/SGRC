@@ -28,7 +28,7 @@ class ReclamacaoController extends Controller
     $reclamacoes = Reclamacao::with('estado', 'condominio', 'condomino', 'tipoReclamacao')->get();
 
     // Passar as reclamações para a view
-    return view('reclamacoes.index', compact('reclamacoes'), ['pageTitle' => 'Reclamações']);
+    return view('reclamacoes.index', compact('reclamacoes'), ['pageTitle' => __('Reclamações')]);
 }
 
 

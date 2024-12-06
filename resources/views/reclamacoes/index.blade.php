@@ -14,38 +14,35 @@
                 </div>
             @else
                 <div class="col-12">
-                    <!-- Cards com a listagem das reclamações -->
-                    <div class="row">
-                        @php
-                            // Definir as cores aleatórias para os cards
-                            $colors = ['bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-info', 'bg-secondary'];
-                            $colorCount = count($colors);
-                        @endphp
-                        @foreach($reclamacoes as $index => $reclamacao)
-                            @php
-                                // Atribuir cor aleatória com opacidade de 0.8
-                                $color = $colors[$index % $colorCount]; // A cor será rotacionada
-                            @endphp
-                            <div class="col-md-4 mb-4">
-                                <div class="card shadow-lg" style="background-color: rgba({{ hex2rgb(hexColor($color)) }}, 0.8);">
-                                    <div class="card-header text-white">
-                                        <h5 class="card-title">{{ $reclamacao->descricao }}</h5>
-                                    </div>
-                                    <div class="card-body bg-light text-center text-dark"> <!-- Texto de cor escura para o corpo -->
-                                        <p><strong>Condomínio:</strong> {{ optional($reclamacao->condominio)->nome }}</p>
-                                        <p><strong>Condômino:</strong> {{ optional($reclamacao->condomino)->nome }}</p>
-                                        <p><strong>Estado:</strong> {{ optional($reclamacao->Estado)->nome }}</p>
+                    <!-- Tabela de listagem das reclamações -->
+                    <table id="reclamacoes-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>{{ __('Descrição') }}</th>
+                                <th>{{ __('Condomínio') }}</th>
+                                <th>{{ __('Condómino') }}</th>
+                                <th>{{ __('Estado') }}</th>
+                                <th>{{ __('Data de Criação') }}</th>
+                                <th>{{ __('Ações') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($reclamacoes as $reclamacao)
+                                <tr>
+                                    <td>{{ $reclamacao->descricao }}</td>
+                                    <td>{{ optional($reclamacao->condominio)->nome }}</td>
+                                    <td>{{ optional($reclamacao->condomino)->nome }}</td>
+                                    <td>{{ optional($reclamacao->Estado)->nome }}</td>
+                                    <td>{{ $reclamacao->created_at->format('d/m/Y') }}</td>
+                                    <td class="text-center">
                                         <a href="{{ route('reclamacoes.show', $reclamacao->id) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i> {{ __('Ver detalhes') }}
                                         </a>
-                                    </div>
-                                    <div class="card-footer text-center" style="background-color: transparent;">
-                                        <span class="text-white">{{ __('Criado em: ') }} {{ $reclamacao->created_at->format('d/m/Y') }}</span> <!-- Texto branco na data -->
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             @endif
         </div>
@@ -75,24 +72,15 @@
     </div>
 @endsection
 
-@php
-// Função para converter cores hexadecimais para valores RGB
-function hex2rgb($hex) {
-    $hex = ltrim($hex, '#');
-    $rgb = array_map('hexdec', str_split($hex, 2));
-    return implode(',', $rgb);
-}
-
-// Função para obter o código hexadecimal das cores do Tailwind
-function hexColor($class) {
-    $colors = [
-        'bg-primary' => '#007bff',
-        'bg-success' => '#28a745',
-        'bg-warning' => '#ffc107',
-        'bg-danger'  => '#dc3545',
-        'bg-info'    => '#17a2b8',
-        'bg-secondary'=> '#6c757d',
-    ];
-    return $colors[$class] ?? '#ffffff'; // Retorna a cor hexadecimal para a classe
-}
-@endphp
+@push('scripts')
+    <!-- Inicialização do DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('#reclamacoes-table').DataTable({
+                language: {
+                    url: '{{ asset("json/dataTables." . app()->getLocale() . ".json") }}'  // Caminho para o arquivo de tradução baseado no idioma
+                }
+            });
+        });
+    </script>
+@endpush

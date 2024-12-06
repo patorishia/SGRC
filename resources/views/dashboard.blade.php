@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Dashboard</h1>
+                <h1 class="m-0">{{__('Painel de Controlo')}}</h1>
             </div>
         </div>
     </div>
@@ -19,7 +19,7 @@
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>{{ $totalCondominios }}</h3>
-                        <p>Total de Condomínios</p>
+                        <p>{{ __('Total de Condomínios') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-building"></i>
@@ -32,12 +32,12 @@
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{{ $totalReclamacoes }}</h3>
-                        <p>Total de Reclamações</p>
+                        <p>{{__('Total de Reclamações')}}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
-                    <a href="{{ route('reclamacoes.index') }}" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('reclamacoes.index') }}" class="small-box-footer">{{__('Mais informações ')}}<i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Gráfico de Reclamações</h3>
+                        <h3 class="card-title">{{__('Gráfico de Reclamações')}}</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="reclamacoesChart" style="max-height: 200px; width: 100%;"></canvas>
@@ -58,7 +58,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Distribuição por Tipo</h3>
+                        <h3 class="card-title">{{__('Distribuição por Tipo')}}</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="tipoReclamacaoChart" style="max-height: 200px; width: 100%;"></canvas>
@@ -71,7 +71,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Evolução no Tempo</h3>
+                        <h3 class="card-title">{{__('Evolução no Tempo')}}</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="evolucaoReclamacoesChart" style="max-height: 200px; width: 100%;"></canvas>
@@ -82,7 +82,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Comparação entre Tipos</h3>
+                        <h3 class="card-title">{{__('Comparação entre Tipos')}}</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="radarReclamacaoChart" style="max-height: 200px; width: 100%;"></canvas>
@@ -96,16 +96,16 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Últimas Reclamações</h3>
+                        <h3 class="card-title">{{__('Últimas Reclamações')}}</h3>
                     </div>
                     <div class="card-body">
                         <table id="ultimasReclamacoesTable" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Condómino</th>
-                                    <th>Condomínio</th>
-                                    <th>Descrição</th>
-                                    <th>Data de Criação</th>
+                                    <th>{{__('Condómino')}}</th>
+                                    <th>{{__('Condomínio')}}</th>
+                                    <th>{{__('Descrição')}}</th>
+                                    <th>{{__('Data de Criação')}}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -126,16 +126,16 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Reclamações Pendentes</h3>
+                        <h3 class="card-title">{{__('Reclamações Pendentes')}}</h3>
                     </div>
                     <div class="card-body">
                         <table id="reclamacoesPendentesTable" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Condómino</th>
-                                    <th>Condomínio</th>
-                                    <th>Descrição</th>
-                                    <th>Data de Criação</th>
+                                <th>{{__('Condómino')}}</th>
+                                    <th>{{__('Condomínio')}}</th>
+                                    <th>{{__('Descrição')}}</th>
+                                    <th>{{__('Data de Criação')}}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -166,7 +166,7 @@
         data: {
             labels: {!! json_encode($labels) !!},
             datasets: [{
-                label: 'Reclamações por Mês',
+                label: '{{ __("Reclamações por Mês") }}',
                 data: {!! json_encode($values) !!},
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -189,7 +189,7 @@
         data: {
             labels: {!! json_encode($tiposLabels) !!},
             datasets: [{
-                label: 'Distribuição de Reclamações por Tipo',
+                label: '{{ __("Distribuição de Reclamações por Tipo") }}',
                 data: {!! json_encode($tiposValues) !!},
                 backgroundColor: ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#9e89ff'],
                 borderColor: 'rgba(0, 0, 0, 0.1)',
@@ -212,7 +212,7 @@
         data: {
             labels: {!! json_encode($labels) !!},
             datasets: [{
-                label: 'Reclamações por Mês',
+                label: '{{ __("Reclamações por Mês") }}',
                 data: {!! json_encode($values) !!},
                 borderColor: '#34d399',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -236,7 +236,7 @@
         data: {
             labels: {!! json_encode($tiposLabels) !!},
             datasets: [{
-                label: 'Tipos de Reclamações',
+                label: '{{ __("Tipos de Reclamações") }}',
                 data: {!! json_encode($tiposValues) !!},
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',

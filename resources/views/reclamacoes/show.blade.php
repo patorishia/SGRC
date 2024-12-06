@@ -8,73 +8,106 @@
     <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-12">
-                <div class="card shadow-lg">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title">{{ __('Detalhes da Reclamação') }}: {{ $reclamacao->descricao }}</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="font-weight-bold">Descrição: {{ $reclamacao->descricao }}</p>
-                        <p><strong>Condomínio:</strong> {{ optional($reclamacao->condominio)->nome }}</p>
-                        <p><strong>Condomino:</strong> {{ optional($reclamacao->condomino)->nome }}</p>
-                        <p><strong>Tipo de Reclamação:</strong> {{ optional($reclamacao->tipoReclamacao)->tipo }}</p>
-                        <p><strong>Estado:</strong> {{ optional($reclamacao->Estado)->nome }}</p>
-                        <p><strong>Data de Criação:</strong> {{ $reclamacao->created_at->format('d/m/Y') }}</p>
-                        <p><strong>Data de Resolução:</strong> {{ $reclamacao->data_resolucao ? $reclamacao->data_resolucao->format('d/m/Y') : 'Não resolvida' }}</p>
+                <!-- Título da Reclamação -->
+                <h3 class="text-dark mb-4">{{ __('Detalhes da Reclamação') }}: <span class="text-primary">{{ $reclamacao->descricao }}</span></h3>
 
-                        <!-- Verificar se existem anexos -->
-                        @if($reclamacao->anexos)
-                            <div class="mb-4">
-                                <label class="font-weight-bold">Anexos Atuais:</label>
-                                <div class="row">
-                                    @foreach(json_decode($reclamacao->anexos) as $anexo)
-                                        @php
-                                            $filePath = public_path('storage/' . $anexo);
-                                            $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-                                        @endphp
-
-                                        <div class="col-md-3">
-                                            @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
-                                                <!-- Exibir imagem -->
-                                                <img src="{{ asset('storage/' . $anexo) }}" alt="Anexo" class="img-thumbnail">
-                                            @else
-                                                <!-- Exibir ícone de download -->
-                                                <a href="{{ asset('storage/' . $anexo) }}" class="btn btn-primary btn-block" download>
-                                                    <i class="fas fa-download"></i> {{ pathinfo($anexo, PATHINFO_BASENAME) }}
-                                                </a>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-
-                        @if(auth()->user()->role === 'admin')
-                            <a href="{{ route('reclamacoes.edit', $reclamacao->id) }}" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
-
-                            <!-- Formulário para excluir a reclamação -->
-                            <form action="{{ route('reclamacoes.destroy', $reclamacao->id) }}" method="POST" class="inline-block mt-4">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja apagar esta reclamação?')">
-                                    <i class="fas fa-trash-alt"></i> {{ __('Apagar') }}
-                                </button>
-                            </form>
-                        @endif
-
-                        <!-- Exibir a notificação de erro ou sucesso -->
-                        @if(session('error'))
-                            <div id="error-message" class="alert alert-danger mt-4">
-                                {{ session('error') }}
-                            </div>
-                        @elseif(session('success'))
-                            <div id="success-message" class="alert alert-success mt-4">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                    </div>
+                <!-- Tabela com os detalhes da Reclamação -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th class="text-center">{{ __('Campo') }}</th>
+                                <th class="text-center">{{ __('Valor') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Descrição') }}</strong></td>
+                                <td>{{ $reclamacao->descricao }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Condomínio') }}</strong></td>
+                                <td>{{ optional($reclamacao->condominio)->nome }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Condómino') }}</strong></td>
+                                <td>{{ optional($reclamacao->condomino)->nome }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Tipo de Reclamação') }}</strong></td>
+                                <td>{{ optional($reclamacao->tipoReclamacao)->tipo }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Estado') }}</strong></td>
+                                <td>{{ optional($reclamacao->estado)->nome }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Data de Criação') }}</strong></td>
+                                <td>{{ $reclamacao->created_at->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td><strong>{{ __('Data de Resolução') }}</strong></td>
+                                <td>{{ $reclamacao->data_resolucao ? $reclamacao->data_resolucao->format('d/m/Y') : __('Não resolvida') }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
+                <!-- Verificar se existem anexos -->
+                @if($reclamacao->anexos)
+                    <div class="mb-4">
+                        <label class="font-weight-bold">{{ __('Anexos Atuais:') }}</label>
+                        <div class="row">
+                            @foreach(json_decode($reclamacao->anexos) as $anexo)
+                                @php
+                                    $filePath = public_path('storage/' . $anexo);
+                                    $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+                                @endphp
+
+                                <div class="col-md-3">
+                                    @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
+                                        <!-- Exibir imagem -->
+                                        <img src="{{ asset('storage/' . $anexo) }}" alt="Anexo" class="img-thumbnail">
+                                    @else
+                                        <!-- Exibir ícone de download -->
+                                        <a href="{{ asset('storage/' . $anexo) }}" class="btn btn-primary btn-block" download>
+                                            <i class="fas fa-download"></i> {{ pathinfo($anexo, PATHINFO_BASENAME) }}
+                                        </a>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Botões de ações para admin -->
+                @if(auth()->user()->role === 'admin')
+                    <div class="mt-4">
+                        <a href="{{ route('reclamacoes.edit', $reclamacao->id) }}" class="btn btn-warning btn-sm rounded-pill">
+                            <i class="fas fa-edit"></i> {{ __('Editar') }}
+                        </a>
+
+                        <!-- Formulário para excluir a reclamação -->
+                        <form action="{{ route('reclamacoes.destroy', $reclamacao->id) }}" method="POST" class="inline-block mt-2">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm rounded-pill" onclick="return confirm('{{ __('Tem certeza que deseja apagar esta reclamação?') }}')">
+                                <i class="fas fa-trash-alt"></i> {{ __('Apagar') }}
+                            </button>
+                        </form>
+                    </div>
+                @endif
+
+                <!-- Exibir a notificação de erro ou sucesso -->
+                @if(session('error'))
+                    <div id="error-message" class="alert alert-danger mt-4 rounded">
+                        <i class="fas fa-exclamation-triangle"></i> {{ session('error') }}
+                    </div>
+                @elseif(session('success'))
+                    <div id="success-message" class="alert alert-success mt-4 rounded">
+                        <i class="fas fa-check-circle"></i> {{ session('success') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

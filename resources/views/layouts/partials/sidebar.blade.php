@@ -1,4 +1,4 @@
-<!-- resources/views/layouts/partials/sidebar.blade.php -->
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Logo do Sistema -->
     <a href="{{ url('/') }}" class="brand-link">
@@ -12,7 +12,7 @@
                 <img src="{{ asset('path/to/user-image.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Bem-vindo, {{ Auth::user()->name }}</a>
+                <a href="#" class="d-block">{{ __('Bem-vindo') }}, {{ Auth::user()->name }}</a>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>{{ __('Dashboard') }}</p>
+                        <p>{{ __('Painel de Controlo') }}</p>
                     </a>
                 </li>
                 
@@ -35,11 +35,11 @@
                     </a>
                 </li>
                 
-                <!-- Condôminos -->
+                <!-- Condóminos -->
                 <li class="nav-item">
                     <a href="{{ route('condominos.index') }}" class="nav-link {{ request()->routeIs('condominos.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
-                        <p>{{ __('Condôminos') }}</p>
+                        <p>{{ __('Condóminos') }}</p>
                     </a>
                 </li>
                 

@@ -10,7 +10,7 @@ class TiposReclamacaoController extends Controller
     public function index()
     {
         $tiposReclamacao = TiposReclamacao::all();
-        return view('tipos_reclamacao.index', compact('tiposReclamacao'), ['pageTitle' => 'Tipos de Reclamação']);
+        return view('tipos_reclamacao.index', compact('tiposReclamacao'), ['pageTitle' =>  __('Tipos de Reclamação')]);
     }
 
     public function create()

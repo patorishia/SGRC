@@ -11,7 +11,7 @@ class CondominoController extends Controller
     {
         // Obtém todos os condominos da tabela 'condomino'
         $condominos = Condomino::all(); 
-        return view('gerente.index', compact('condominos'), ['pageTitle' => 'Condôminos']); // Retorna a view de condominos~
+        return view('gerente.index', compact('condominos'), ['pageTitle' => __('Condóminos')]); // Retorna a view de condominos~
         
     }
 

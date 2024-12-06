@@ -13,7 +13,7 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Painel de Controlo') }}
                     </x-nav-link>
                     <x-nav-link :href="route('condominios.index')" :active="request()->routeIs('condominios.index')">
                         {{ __('Condomínios') }}
@@ -22,7 +22,7 @@
                         {{ __('Reclamações') }}
                     </x-nav-link>
                     <x-nav-link :href="route('gerente.index')" :active="request()->routeIs('gerente.index')">
-                        {{ __('Condominos') }}
+                        {{ __('Condóminos') }}
                     </x-nav-link>
                     <x-nav-link :href="route('tipos_reclamacao.index')" :active="request()->routeIs('tipos_reclamacao.index')">
                         {{ __('Tipos Reclamacao') }}
@@ -47,7 +47,7 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('Perfil') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -57,7 +57,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Terminar Sessão') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -80,7 +80,7 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('Painel de Controlo') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('condominios.index')" :active="request()->routeIs('condominios.index')">
                 {{ __('Condomínios') }}
@@ -89,7 +89,7 @@
                 {{ __('Reclamações') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('gerente.index')" :active="request()->routeIs('gerente.index')">
-                {{ __('Condominos') }}
+                {{ __('Condóminos') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('tipos_reclamacao.index')" :active="request()->routeIs('tipos_reclamacao.index')">
                 {{ __('Tipos Reclamaçao') }}
@@ -105,7 +105,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Perfil') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
@@ -115,7 +115,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Terminar Sessão') }}
                     </x-responsive-nav-link>
                 </form>
             </div>

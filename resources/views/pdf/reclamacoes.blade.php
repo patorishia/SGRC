@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Relatório de Reclamações</title>
+    <title>{{ __('Relatório de Reclamações') }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,18 +28,18 @@
     </style>
 </head>
 <body>
-    <h1 class="header">Relatório de Reclamações</h1>
+    <h1 class="header">{{ __('Relatório de Reclamações') }}</h1>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Condomínio</th>
-                <th>Condómino</th>
-                <th>Tipo de Reclamação</th>
-                <th>Estado</th>
-                <th>Descrição</th>
-                <th>Criado a</th>
-                <th>Atualizado a</th>
+                <th>{{ __('ID') }}</th>
+                <th>{{ __('Condomínio') }}</th>
+                <th>{{ __('Condómino') }}</th>
+                <th>{{ __('Tipo de Reclamação') }}</th>
+                <th>{{ __('Estado') }}</th>
+                <th>{{ __('Descrição') }}</th>
+                <th>{{ __('Criado a') }}</th>
+                <th>{{ __('Atualizado a') }}</th>
             </tr>
         </thead>
         <tbody>

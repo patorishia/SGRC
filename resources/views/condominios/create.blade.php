@@ -50,10 +50,11 @@
 
                     <!-- Botão de Enviar -->
                     <button type="submit" class="btn btn-success">
-                        Criar Condominio
+                        {{ __('Criar Condominio') }}
                     </button>
                 </form>
             </div>
         </div>
     </div>
 @endsection
+
