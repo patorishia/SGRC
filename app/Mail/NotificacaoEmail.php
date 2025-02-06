@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -13,40 +12,41 @@ class NotificacaoEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    // Dados a serem enviados no email
+    public $dados;
+
     /**
-     * Create a new message instance.
+     * Construtor da classe.
+     *
+     * @param  mixed  $dados
      */
-
-     public $dados; 
-
     public function __construct($dados)
     {
         $this->dados = $dados;
     }
 
     /**
-     * Get the message envelope.
+     * Define o envelope do email (assunto).
+     *
+     * @return \Illuminate\Mail\Mailables\Envelope
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Notificacao Email',
-            
-        );
+        return new Envelope(subject: 'Notificacao Email');
     }
 
     /**
-     * Get the message content definition.
+     * Define o conteúdo do email.
+     *
+     * @return \Illuminate\Mail\Mailables\Content
      */
     public function content(): Content
     {
-        return new Content(
-            view: 'emails.notificacao',
-        );
+        return new Content(view: 'emails.notificacao');
     }
 
     /**
-     * Get the attachments for the message.
+     * Retorna os anexos do email (nenhum neste caso).
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */

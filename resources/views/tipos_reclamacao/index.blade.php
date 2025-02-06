@@ -1,26 +1,33 @@
 @extends('layouts.app')
 
-@section('header')
-    <h1 class="m-0 text-dark">{{ __('Tipos de Reclamação') }}</h1>
-@endsection
-
 @section('content')
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <!-- Verificar se existem tipos de reclamação -->
-            @if($tiposReclamacao->isEmpty())
-                <div class="col-12 text-center">
-                    <p class="text-muted">{{ __('Ainda não há tipos de reclamação.') }}</p>
-                </div>
-            @else
-                <div class="col-12">
-                    <!-- Tabela com a listagem dos tipos de reclamação -->
-                    <table id="tipos-reclamacao-table" class="table table-bordered table-striped">
-                        <thead>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3 class="text-dark mb-4">{{ __('Tipos de Reclamação') }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Verificar se existem tipos de reclamação -->
+        @if($tiposReclamacao->isEmpty())
+            <div class="col-12 text-center">
+                <p class="text-muted">{{ __('Ainda não há tipos de reclamação.') }}</p>
+            </div>
+        @else
+            <div class="col-12">
+                <!-- Tabela com a listagem dos tipos de reclamação -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead class="bg-gray text-white">
                             <tr>
-                                <th>{{ __('Tipo') }}</th>
-                                <th>{{ __('Data de Criação') }}</th>
-                                <th>{{ __('Ações') }}</th>
+                                <th class="text-center text-shadow">{{ __('Tipo') }}</th>
+                                <th class="text-center text-shadow">{{ __('Data de Criação') }}</th>
+                                <th class="text-center text-shadow">{{ __('Ações') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,19 +45,33 @@
                         </tbody>
                     </table>
                 </div>
-            @endif
-        </div>
-
-        <!-- Botão para adicionar tipo de reclamação -->
-        <div class="row">
-            <div class="col-12 text-center mt-4">
-                <a href="{{ route('tipos_reclamacao.create') }}" class="btn btn-success">
-                    <i class="fas fa-plus-circle"></i> {{ __('Adicionar Tipo de Reclamação') }}
-                </a>
             </div>
+        @endif
+    </div>
+
+    <!-- Botão para adicionar tipo de reclamação -->
+    <div class="row">
+        <div class="col-12 text-center mt-4">
+            <a href="{{ route('tipos_reclamacao.create') }}" class="btn btn-success btn-lg">
+                <i class="fas fa-plus-circle"></i> {{ __('Adicionar Tipo de Reclamação') }}
+            </a>
         </div>
     </div>
+</div>
+
 @endsection
+
+@push('styles')
+    <style>
+        .text-shadow {
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        .btn-lg {
+            padding: 12px 30px;
+            font-size: 18px;
+        }
+    </style>
+@endpush
 
 @push('scripts')
     <!-- Inicialização do DataTables -->

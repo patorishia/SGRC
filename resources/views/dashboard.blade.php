@@ -24,7 +24,7 @@
                     <div class="icon">
                         <i class="fas fa-building"></i>
                     </div>
-                    <a href="{{ route('condominios.index') }}" class="small-box-footer">Mais informações <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('condominios.index') }}" class="small-box-footer">{{__('Mais informações ')}}<i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -39,6 +39,20 @@
                     </div>
                     <a href="{{ route('reclamacoes.index') }}" class="small-box-footer">{{__('Mais informações ')}}<i class="fas fa-arrow-circle-right"></i></a>
                 </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{ $totalCondominos }}</h3>
+                        <p>{{ __('Total de Condomínos') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <a href="{{ route('users.index') }}" class="small-box-footer">{{__('Mais informações ')}}<i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+</div>
+
             </div>
         </div>
 
@@ -111,7 +125,7 @@
                             <tbody>
                                 @foreach ($ultimasReclamacoes as $reclamacao)
                                     <tr>
-                                        <td>{{ $reclamacao->condomino->nome }}</td>
+                                        <td>{{ $reclamacao->user->name }}</td>
                                         <td>{{ $reclamacao->condominio->nome }}</td>
                                         <td>{{ $reclamacao->descricao }}</td>
                                         <td>{{ $reclamacao->created_at->format('d/m/Y H:i:s') }}</td>
@@ -141,7 +155,7 @@
                             <tbody>
                                 @foreach ($reclamacoesPendentes as $reclamacao)
                                     <tr>
-                                        <td>{{ $reclamacao->condomino->nome }}</td>
+                                        <td>{{ $reclamacao->user->name }}</td>
                                         <td>{{ $reclamacao->condominio->nome }}</td>
                                         <td>{{ $reclamacao->descricao }}</td>
                                         <td>{{ $reclamacao->created_at->format('d/m/Y H:i:s') }}</td>
@@ -251,18 +265,21 @@
 
     // Inicialização do DataTables
     $(document).ready(function() {
-        $('#ultimasReclamacoesTable').DataTable({
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese.json"
-            }
-        });
+    var currentLocale = "{{ session('locale', 'pt') }}";
 
-        $('#reclamacoesPendentesTable').DataTable({
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese.json"
-            }
-        });
+    $('#ultimasReclamacoesTable').DataTable({
+        "language": {
+            "url": `https://cdn.datatables.net/plug-ins/1.10.21/i18n/${currentLocale === 'en' ? 'English' : 'Portuguese'}.json`
+        }
     });
+
+    $('#reclamacoesPendentesTable').DataTable({
+        "language": {
+            "url": `https://cdn.datatables.net/plug-ins/1.10.21/i18n/${currentLocale === 'en' ? 'English' : 'Portuguese'}.json`
+        }
+    });
+});
+
 </script>
 
 @endsection

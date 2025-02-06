@@ -9,16 +9,18 @@ class TiposReclamacao extends Model
 {
     use HasFactory;
 
+    // Define a tabela associada ao modelo
     protected $table = 'tipos_reclamacao';
 
-    public function reclamacoes()
-{
-    return $this->hasMany(Reclamacao::class, 'tipo_reclamacao');
-}
-
-
+    // Permite atribuição em massa apenas nestes campos
     protected $fillable = [
-        'tipo',
-        'descricao',
+        'tipo',        
+        'descricao',  
     ];
+
+    // Um tipo de reclamação pode estar associado a várias reclamações
+    public function reclamacoes()
+    {
+        return $this->hasMany(Reclamacao::class, 'tipo_reclamacao');
+    }
 }

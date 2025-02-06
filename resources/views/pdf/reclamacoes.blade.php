@@ -47,9 +47,9 @@
             <tr>
                 <td>{{ $reclamacao->id }}</td>
                 <td>{{ $reclamacao->condominio->nome }}</td>
-                <td>{{ $reclamacao->condomino->nome }}</td>
+                <td>{{ $reclamacao->user->name }}</td>
                 <td>{{ $reclamacao->tipoReclamacao->tipo }}</td>
-                <td>{{ $reclamacao->Estado->nome }}</td>
+                <td>{{ $reclamacao->estado->nome }}</td>
                 <td>{{ $reclamacao->descricao }}</td>
                 <td>{{ $reclamacao->created_at }}</td>
                 <td>{{ $reclamacao->updated_at }}</td>

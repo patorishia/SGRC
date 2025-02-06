@@ -6,45 +6,51 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reclamacao extends Model
 {
-    // Nome correto da tabela
-    protected $table = 'reclamacao'; 
+    // Define a tabela associada ao modelo
+    protected $table = 'reclamacao';
 
+    // Permite atribuição em massa apenas nos seguintes campos
     protected $fillable = [
-        'condomino_nif', 'condominio_id', 'tipo_reclamacao', 'descricao', 'estado', 'created_at', 'data_resolucao'
+        'user_id',
+        'condominio_id',
+        'tipo_reclamacao',
+        'descricao',
+        'estado_id',
+        'created_at',
+        'resolved_at',
+        'processo'
     ];
 
+    // Garante que os campos de data sejam interpretados corretamente
     protected $casts = [
         'created_at' => 'datetime',
-        'data_resolucao' => 'datetime', // Se você tem este campo
+        'resolved_at' => 'datetime',
     ];
 
-    public $timestamps = false; // Se você não está utilizando os campos created_at e updated_at
+    // Indica que a tabela não tem os campos created_at e updated_at geridos automaticamente pelo Laravel
+    public $timestamps = false;
 
-    // Defina as relações
-    public function condomino()
+    // Reclamação pertence a um utilizador
+    public function user()
     {
-        return $this->belongsTo(Condomino::class, 'condomino_nif');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Reclamação está associada a um condomínio
     public function condominio()
     {
         return $this->belongsTo(Condominio::class, 'condominio_id');
     }
 
+    // Reclamação tem um tipo específico
     public function tipoReclamacao()
     {
         return $this->belongsTo(TiposReclamacao::class, 'tipo_reclamacao');
     }
 
-// In the Reclamacao model
-// Em Reclamacao.php
-public function estado()
-{
-    return $this->belongsTo(Estado::class, 'estado', 'id');
+    // Reclamação tem um estado associado
+    public function estado()
+    {
+        return $this->belongsTo(Estado::class, 'estado_id', 'id');
+    }
 }
-
-
-
-
-}
-

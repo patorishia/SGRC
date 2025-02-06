@@ -1,17 +1,20 @@
 @extends('layouts.app')
 
-@section('header')
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Adicionar Condomínio') }}
-    </h2>
-@endsection
-
 @section('content')
-    <!-- Card principal com margem adequada -->
-    <div class="container mx-auto mt-8">
-        <div class="card shadow-lg">
-            <div class="card-header bg-blue-600 text-white">
-                <h3 class="card-title">{{ __('Adicionar Condomínio') }}</h3>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">{{__('Condomínios')}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Card principal com mais margem e espaçamento -->
+    <div class="container mx-auto mt-12 flex justify-center">
+        <div class="card shadow-lg w-full max-w-2xl mt-4 rounded-lg">
+            <div class="card-header bg-blue-600 text-black text-center py-4">
+                <h3 class="card-title font-bold text-xl ">{{ __('Adicionar Condomínio') }}</h3>
             </div>
 
             <div class="card-body">
@@ -42,6 +45,12 @@
                         <input type="text" name="codigo_postal" id="codigo_postal" class="form-control" required>
                     </div>
 
+                    <!-- Campo Manager -->
+                    <div class="form-group mb-4">
+                        <label for="manager_id" class="control-label">{{ __('Manager') }}</label>
+                        <input type="text" class="form-control" id="manager_id" value="{{ auth()->user()->name }}" disabled>
+                    </div>
+
                     <!-- Campo Data de Criação (automático) -->
                     <div class="form-group mb-4">
                         <label for="created_at" class="control-label">{{ __('Data de Criação') }}:</label>
@@ -49,12 +58,13 @@
                     </div>
 
                     <!-- Botão de Enviar -->
-                    <button type="submit" class="btn btn-success">
-                        {{ __('Criar Condominio') }}
-                    </button>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-plus-circle"></i> {{ __('Criar Condomínio') }}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 @endsection
-

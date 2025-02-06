@@ -1,13 +1,11 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-import Chart from 'chart.js/auto';
-
+import 'bootstrap';
+import 'admin-lte';
+import 'jquery'; 
+import 'datatables.net-bs4';
 
 window.Alpine = Alpine;
 
 Alpine.start();
-
-require('admin-lte');~
-require('jquery');
-require('datatables.net-bs4');

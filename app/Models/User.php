@@ -10,42 +10,61 @@ use App\Notifications\CustomVerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Define os campos que podem ser preenchidos diretamente
     protected $fillable = [
+        'nif',
         'name',
         'email',
         'password',
-        'role'
+        'telefone',
+        'condominio_id',
+        'role',
+        'profileImage'
     ];
-    
+
+    // Define a chave primária e ativa o auto-incremento
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+
+    // Um utilizador pertence a um condomínio
+    public function condominio()
+    {
+        return $this->belongsTo(Condominio::class, 'condominio_id');
+    }
+
+    // Um utilizador pode ter outro utilizador como gestor (admin)
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+    // Envia uma notificação personalizada de verificação de e-mail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail);
     }
-    
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // Um utilizador pode ter várias reclamações associadas
+    public function reclamacoes()
+    {
+        return $this->hasMany(Reclamacao::class, 'user_id', 'id');
+    }
+
+    // Verifica se o utilizador é administrador
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    // Define os atributos que devem ser ocultados
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    // Define os tipos dos atributos
     protected function casts(): array
     {
         return [

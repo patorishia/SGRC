@@ -5,19 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Reclamacao;
 use App\Models\Condominio;
 use App\Models\TiposReclamacao;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
-    //
     public function index()
     {
+        if (auth()->check() && auth()->user()->role !== 'admin') {
+            return redirect()->route('unauthorized'); // Redireciona para a página de não autorizado
+        }
+
         $totalCondominios = Condominio::count();
         $totalReclamacoes = Reclamacao::count();
+        $totalCondominos = User::count();
         $ultimasReclamacoes = Reclamacao::orderBy('created_at', 'desc')->take(5)->get();
-        $reclamacoesResolvidas = Reclamacao::where('estado', 'resolvida')->count();
+        $reclamacoesResolvidas = Reclamacao::where('estado_id', 'resolvida')->count();
         // Procura apenas as reclamações com o estado "pendente"
-        $reclamacoesPendentes = Reclamacao::with('tipoReclamacao', 'condominio', 'condomino', 'estado')
-            ->where('estado', 1) // Filtra para mostrar apenas as pendentes
+        $reclamacoesPendentes = Reclamacao::with('tipoReclamacao', 'condominio', 'user', 'estado')
+            ->where('estado_id', 1) // Filtra para mostrar apenas as pendentes
             ->get();
 
         $tiposLabels = TiposReclamacao::pluck('tipo')->toArray();
@@ -35,14 +40,17 @@ class DashboardController extends Controller
         $values = $reclamacoesPorMes->pluck('count');
 
         // Passar dados para a view
-        return view('dashboard', compact('totalReclamacoes', 'ultimasReclamacoes', 'totalCondominios', 'labels', 'values', 'tiposLabels', 'tiposValues', 'reclamacoesPendentes'));
-
         return view('dashboard', compact(
-            'totalCondominios',
             'totalReclamacoes',
+            'totalCondominos',
+            'ultimasReclamacoes',
+            'totalCondominios',
+            'labels',
+            'values',
+            'tiposLabels',
+            'tiposValues',
             'reclamacoesPendentes',
-            'reclamacoesResolvidas',
-            'ultimasReclamacoes'
+            'reclamacoesResolvidas'
         ));
     }
 }

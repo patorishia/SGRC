@@ -1,111 +1,111 @@
 @extends('layouts.app')
 
-@section('header')
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Criar Reclamação') }}
-    </h2>
-@endsection
-
 @section('content')
-    <!-- Card principal com margem adequada -->
-    <div class="container mx-auto mt-8">
-        <div class="card shadow-lg">
-            <div class="card-header bg-blue-600 text-white">
-                <h3 class="card-title">{{ __('Criar Reclamação') }}</h3>
-            </div>
-
-            <div class="card-body">
-                <form action="{{ route('reclamacoes.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="form-group">
-                        <label for="condominio_id" class="control-label">{{ __('Condomínio:') }}</label>
-                        <select name="condominio_id" id="condominio_id" class="form-control" required>
-                            <option value="" disabled selected>{{ __('Selecione um Condomínio') }}</option>
-                            @foreach($condominios as $condominio)
-                                <option value="{{ $condominio->id }}">{{ $condominio->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="condomino_nif" class="control-label">{{ __('Condómino:') }}</label>
-                        <select name="condomino_nif" id="condomino_nif" class="form-control" required>
-                            <option value="" disabled selected>{{ __('Selecione um Condómino') }}</option>
-                            @foreach($condominos as $condomino)
-                                <option value="{{ $condomino->nif }}">{{ $condomino->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tipo_reclamacao" class="control-label">{{ __('Tipo de Reclamação:') }}</label>
-                        <select name="tipo_reclamacao" id="tipo_reclamacao" class="form-control" required>
-                            <option value="" disabled selected>{{ __('Selecione o Tipo de Reclamação') }}</option>
-                            @foreach($tiposReclamacao as $tipo)
-                                <option value="{{ $tipo->id }}">{{ $tipo->tipo }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="descricao" class="control-label">{{ __('Descrição:') }}</label>
-                        <textarea name="descricao" id="descricao" class="form-control" rows="4" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="estado" class="control-label">{{ __('Estado:') }}</label>
-                        <select name="estado" id="estado" class="form-control" required>
-                            @foreach($estados as $estado)
-                                <option value="{{ $estado->id }}">{{ $estado->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="anexos" class="control-label">{{ __('Adicionar ou atualizar anexos:') }}</label>
-                        <input type="file" name="anexos[]" id="anexos" class="form-control" multiple>
-                    </div>
-
-                    <!-- Campos de nome para os anexos -->
-                    <div id="anexo_nome_fields"></div>
-
-                    <button type="submit" class="btn btn-success">
-                        {{ __('Criar Reclamação') }}
-                    </button>
-                </form>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">{{__('Reclamações')}}</h1>
             </div>
         </div>
     </div>
+</div>
 
-    @push('scripts')
-        <script>
-            document.getElementById('anexos').addEventListener('change', function() {
-                var container = document.getElementById('anexo_nome_fields');
-                container.innerHTML = ''; // Limpa os campos de nome existentes
+<!-- Card principal com mais margem e espaçamento -->
+<div class="container mx-auto mt-12 flex justify-center">
+    <div class="card shadow-lg w-full max-w-2xl mt-4 rounded-lg">
+        <div class="card-header bg-blue-600 text-black text-center py-4">
+            <h3 class="card-title font-bold text-xl ">{{ __('Criar Reclamação') }}</h3>
+        </div>
 
-                // Cria campos de nome para cada arquivo selecionado
-                for (let i = 0; i < this.files.length; i++) {
-                    var inputGroup = document.createElement('div');
-                    inputGroup.classList.add('form-group');
+        <div class="card-body">
+            <form action="{{ route('reclamacoes.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-                    var label = document.createElement('label');
-                    label.setAttribute('for', 'anexo_nome_' + i);
-                    label.classList.add('control-label');
-                    label.textContent = '{{ __("Nome do anexo ") }}' + (i + 1) + ':'; 
+                <!-- Condomínio -->
+                <div class="form-group mb-4">
+                    <label for="condominio_id" class="control-label">{{ __('Condomínio:') }}</label>
+                    <input type="text" id="condominio_id" class="form-control" value="{{ $currentCondominio->nome }}" readonly>
+                    <input type="hidden" name="condominio_id" value="{{ $currentCondominio->id }}">
+                </div>
 
-                    var input = document.createElement('input');
-                    input.setAttribute('type', 'text');
-                    input.setAttribute('name', 'anexo_nome[]');
-                    input.setAttribute('id', 'anexo_nome_' + i);
-                    input.classList.add('form-control');
-                    input.setAttribute('placeholder', '{{ __("Nome do anexo ") }}' + (i + 1));
+                <!-- Condómino -->
+                <div class="form-group mb-4">
+                    <label for="user_id" class="control-label">{{ __('Condómino:') }}</label>
+                    <input type="text" id="user_id" class="form-control" value="{{ $currentUser->name }}" readonly>
+                    <input type="hidden" name="user_id" value="{{ $currentUser->id }}">
+                </div>
 
-                    inputGroup.appendChild(label);
-                    inputGroup.appendChild(input);
-                    container.appendChild(inputGroup);
-                }
-            });
-        </script>
-    @endpush
+                <!-- Tipo de Reclamação -->
+                <div class="form-group mb-4">
+                    <label for="tipo_reclamacao" class="control-label">{{ __('Tipo de Reclamação:') }}</label>
+                    <select name="tipo_reclamacao" id="tipo_reclamacao" class="form-control" required>
+                        <option value="" disabled selected>{{ __('Selecione o Tipo de Reclamação') }}</option>
+                        @foreach($tiposReclamacao as $tipo)
+                            <option value="{{ $tipo->id }}">{{ $tipo->tipo }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Descrição -->
+                <div class="form-group mb-4">
+                    <label for="descricao" class="control-label">{{ __('Descrição:') }}</label>
+                    <textarea name="descricao" id="descricao" class="form-control" rows="4" required></textarea>
+                </div>
+
+                <!-- Estado -->
+                <div class="form-group mb-4">
+                    <label for="estado_id" class="control-label">{{ __('Estado:') }}</label>
+                    <input type="text" id="estado_id" class="form-control" value="Pendente" readonly>
+                </div>
+
+                <!-- Anexos -->
+                <div class="form-group mb-4">
+                    <label for="anexos" class="control-label">{{ __('Adicionar ou atualizar anexos:') }}</label>
+                    <input type="file" name="anexos[]" id="anexos" class="form-control" multiple>
+                </div>
+
+                <!-- Campos de nome para os anexos -->
+                <div id="anexo_nome_fields"></div>
+
+                <!-- Botão de Enviar -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus-circle"></i> {{ __('Criar Reclamação') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+    <script>
+        document.getElementById('anexos').addEventListener('change', function () {
+            var container = document.getElementById('anexo_nome_fields');
+            container.innerHTML = ''; // Limpa os campos de nome existentes
+
+            for (let i = 0; i < this.files.length; i++) {
+                var inputGroup = document.createElement('div');
+                inputGroup.classList.add('form-group', 'mb-4');
+
+                var label = document.createElement('label');
+                label.setAttribute('for', 'anexo_nome_' + i);
+                label.classList.add('control-label');
+                label.textContent = '{{ __("Nome do anexo ") }}' + (i + 1) + ':';
+
+                var input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('name', 'anexo_nome[]');
+                input.setAttribute('id', 'anexo_nome_' + i);
+                input.classList.add('form-control');
+                input.setAttribute('placeholder', '{{ __("Nome do anexo ") }}' + (i + 1));
+
+                inputGroup.appendChild(label);
+                inputGroup.appendChild(input);
+                container.appendChild(inputGroup);
+            }
+        });
+    </script>
+@endpush
 @endsection

@@ -2,59 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    // Método para exibir o perfil do utilizador
+    public function show()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        return view('profile.profile'); // Exibe a visualização do perfil
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    // Método para editar o perfil do utilizador
+    public function edit()
     {
-        $request->user()->fill($request->validated());
+        return view('profile.profile');
+    }
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+    // Método para atualizar as informações do perfil
+    public function update(Request $request)
+    {
+        // Validação dos dados recebidos
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . auth()->user()->id,
+            'profileImage' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Valida o arquivo de imagem
+        ]);
+
+        // Obtém o utilizador autenticado
+        $user = auth()->user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        // Tratamento do upload da imagem de perfil
+        if ($request->hasFile('profileImage')) {
+            // Elimina a imagem antiga, caso exista
+            if ($user->profileImage) {
+                Storage::delete('public/profileImages/' . $user->profileImage);
+            }
+
+            // Guarda a nova imagem
+            $imageName = time() . '.' . $request->profileImage->extension();
+            $request->profileImage->storeAs('profileImages', $imageName);
+
+            // Atualiza o caminho da imagem de perfil
+            $user->profileImage = $imageName;
         }
 
-        $request->user()->save();
+        // Salva as alterações no perfil
+        $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        // Redireciona para a página de edição com uma mensagem de sucesso
+        return redirect()->route('profile.edit')->with('success', __('Perfil atualizado com sucesso.'));
     }
 }

@@ -64,6 +64,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
@@ -111,5 +115,8 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
+
+
+
 
 ];

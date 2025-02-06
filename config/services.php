@@ -35,12 +35,4 @@ return [
         ],
     ],
 
-  
-    'gesfaturacao' => [
-        'base_url' => env('GESFATURACAO_API_URL'),
-        'username' => env('GESFATURACAO_USERNAME'),
-        'password' => env('GESFATURACAO_PASSWORD'),
-        'token' => env('GESFATURACAO_TOKEN'),
-    ],
-
 ];

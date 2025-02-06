@@ -1,0 +1,16 @@
+{
+    "decimal": ".",
+    "thousands": ",",
+    "search": "Search:",
+    "lengthMenu": "Show _MENU_ records per page",
+    "info": "Showing _START_ to _END_ of _TOTAL_ records",
+    "infoEmpty": "No records available",
+    "loadingRecords": "Loading...",
+    "zeroRecords": "No records found",
+    "paginate": {
+        "first": "First",
+        "last": "Last",
+        "next": "Next",
+        "previous": "Previous"
+    }
+}

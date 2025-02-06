@@ -8,10 +8,12 @@ use Illuminate\View\View;
 class AppLayout extends Component
 {
     /**
-     * Get the view / contents that represents the component.
+     * Retorna a vista que representa este componente de layout.
+     *
+     * @return View
      */
     public function render(): View
     {
-        return view('layouts.app');
+        return view('layouts.app'); // Usa a vista 'layouts.app' como estrutura base da aplicação
     }
 }

@@ -1,0 +1,16 @@
+{
+    "decimal": ",",
+    "thousands": ".",
+    "search": "Pesquisar:",
+    "lengthMenu": "Mostrar _MENU_ registos por página",
+    "info": "Mostrando _START_ a _END_ de _TOTAL_ registos",
+    "infoEmpty": "Nenhum registo disponível",
+    "loadingRecords": "Carregando...",
+    "zeroRecords": "Nenhum registo encontrado",
+    "paginate": {
+        "first": "Primeiro",
+        "last": "Último",
+        "next": "Próximo",
+        "previous": "Anterior"
+    }
+}
